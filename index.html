@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Interactive Microeconomics</title>
+
+<style>
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html,
+body{
+    overflow-x:hidden;
+}
+
+body{
+    font-family:Arial,Helvetica,sans-serif;
+    background:#f4f6fb;
+}
+
+.container{
+    width:min(1200px,90%);
+    margin:auto;
+    padding:50px 0;
+}
+
+h1{
+    text-align:center;
+    margin-bottom:10px;
+    font-size: clamp(1.8rem, 5vw, 2.5rem); /* Scales nicely from mobile to desktop */
+}
+
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:50px;
+    font-size: clamp(1rem, 3vw, 1.2rem);
+}
+
+.grid{
+    display:grid;
+    /* Changed minmax from 450px to 300px so it fits smaller mobile screens without clipping */
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:30px;
+}
+
+.card{
+    background:white;
+    border-radius:12px;
+    overflow:hidden;
+    text-decoration:none;
+    color:#222;
+    box-shadow:0 5px 15px rgba(0,0,0,.08);
+    transition:.25s;
+}
+
+.card:hover{
+    transform:translateY(-6px);
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+}
+
+.preview {
+    height: 265px; /* Increased slightly to account for the new padding */
+    overflow: hidden;
+    position: relative;
+    background: #fff;
+    padding: 15px 0 0 0; /* Adds breathing room at the top */
+}
+
+.preview iframe {
+    position: absolute;
+    top: 15px; /* Pushes the iframe down past the top padding */
+    left: 0;
+    width: 250%; 
+    height: 625px; 
+    border: none;
+    transform: scale(0.4);
+    transform-origin: 0 0;
+    pointer-events: none;
+}
+
+.title{
+    padding:18px;
+    text-align:center;
+    font-size:1.1rem;
+    font-weight:bold;
+    border-top: 1px solid #eee;
+}
+
+/* Mobile Adjustments */
+@media(max-width:600px){
+    .container{
+        padding:30px 0;
+    }
+    
+    .preview {
+        height: 195px; /* Increased slightly for mobile padding */
+        padding: 12px 0 0 0;
+    }
+    
+    .preview iframe {
+        top: 12px;
+        width: 333.33%;
+        height: 600px;
+        transform: scale(0.3);
+    }
+}
+</style>
+
+</head>
+<body>
+
+<div class="container">
+    <h1>Interactive Microeconomics</h1>
+    <p class="subtitle">Learn Economics Through Interactive Lessons</p>
+
+    <div class="grid">
+        <a class="card" href="lawofdemand/law-of-demand.html">
+            <div class="preview">
+                <iframe src="lawofdemand/law-of-demand.html"></iframe>
+            </div>
+            <div class="title">Law of Demand</div>
+        </a>
+
+        <a class="card" href="lawofsupply/law-of-supply.html">
+            <div class="preview">
+                <iframe src="lawofsupply/law-of-supply.html"></iframe>
+            </div>
+            <div class="title">Law of Supply</div>
+        </a>
+
+        <a class="card" href="mandsdemand/mands-demand.html">
+            <div class="preview">
+                <iframe src="mandsdemand/mands-demand.html"></iframe>
+            </div>
+            <div class="title">Movement along the Curve vs Shift in Demand</div>
+        </a>
+
+        <a class="card" href="mandssupply/mands-supply.html">
+            <div class="preview">
+                <iframe src="mandssupply/mands-supply.html"></iframe>
+            </div>
+            <div class="title">Movement along the Curve vs Shift in Supply</div>
+        </a>
+
+         <a class="card" href="marketequilibrium/marketequilibrium.html">
+            <div class="preview">
+                <iframe src="marketequilibrium/marketequilibrium.html"></iframe>
+            </div>
+            <div class="title">Movement along the Curve vs Shift in Supply</div>
+        </a>
+
+
+         <a class="card" href="shiftsindands/shifts-in-dands.html">
+            <div class="preview">
+                <iframe src="shiftsindands/shifts-in-dands.html"></iframe>
+            </div>
+            <div class="title">Movement along the Curve vs Shift in Supply</div>
+        </a>
+
+         <a class="card" href="elasticityofdemand/elasticity.html">
+            <div class="preview">
+                <iframe src="elasticityofdemand/elasticity.html"></iframe>
+            </div>
+            <div class="title">Movement along the Curve vs Shift in Supply</div>
+        </a>
+    </div>
+</div>
+
+</body>
+</html>

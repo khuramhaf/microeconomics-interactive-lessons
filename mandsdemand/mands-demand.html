@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Movement along the Curve vs Shift in Demand — Interactive Lesson</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
+
+  <link rel="stylesheet" href="tillgraph.css">
+  <link rel="stylesheet" href="aftergraph.css">
+</head>
+<body>
+
+<div class="app">
+
+  <!-- LEFT COLUMN -->
+  <div class="col-left">
+
+    <div class="card graph-card">
+      <svg id="graph-svg" viewBox="0 0 560 420" preserveAspectRatio="xMidYMid meet"></svg>
+    </div>
+
+    <div class="card data-row">
+      <div class="data-block">
+        <div class="label">Active Equation</div>
+        <div class="value" id="equation-display">P = 20 − 2Q</div>
+      </div>
+      <div class="data-block">
+        <div class="label">Quantity (Q)</div>
+        <div class="value" id="revenue-display">Quantity (Q): 50</div>
+      </div>
+    </div>
+
+    <!-- Desktop sliders -->
+    <div class="card controls-desktop">
+      <div class="controls-row">
+        <div class="control-block">
+          <div class="control-top">
+            <label for="price-number">Price (P)</label>
+            <input type="number" id="price-number" min="0" max="26" step="0.2" value="10" readonly>
+          </div>
+          <input type="range" id="price-range" min="0" max="26" step="0.2" value="10">
+        </div>
+        <div class="control-block">
+          <div class="control-top">
+            <label for="qty-number">Intercept</label>
+            <input type="number" id="qty-number" min="0" max="26" step="0.2" value="20" readonly>
+          </div>
+          <input type="range" id="qty-range" min="0" max="26" step="0.2" value="20">
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile stepper rows -->
+    <div class="card controls-mobile">
+    
+
+     <div class="stepper-row">
+
+    <button class="step-btn" id="price-minus" type="button">−</button>
+
+    <span>← Price</span>
+
+    <input
+        type="number"
+        id="price-number-m"
+        min="0"
+        max="26"
+        step="0.2"
+        value="12" readonly>
+
+    <span>Price →</span>
+
+    <button class="step-btn" id="price-plus" type="button">+</button>
+
+</div>
+
+<div class="stepper-row">
+
+    <button class="step-btn" id="qty-minus" type="button">−</button>
+
+    <span>← Intercept</span>
+
+    <input
+        type="number"
+        id="qty-number-m"
+        min="0"
+        max="26"
+        step="0.2"
+        value="20" readonly>
+
+    <span>Intercept →</span>
+
+    <button class="step-btn" id="qty-plus" type="button">+</button>
+
+</div>
+<!--new code end-->
+    </div>
+
+  </div>
+
+  <!-- RIGHT COLUMN -->
+  <div class="col-right">
+
+  <div class="card">
+  <div class="quiz-header">
+    <h2>Learn by Doing</h2>
+    
+    <!-- New wrapper row to separate layout from the main title -->
+    <div class="quiz-sub-row">
+      <span id="q-index">Question 1 of 3</span>
+      
+      <div class="quiz-buttons">
+        <div class="nav-group">
+          <button id="q-prev">Previous</button>
+          <button id="q-next">Next</button>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  <div class="quiz-question" id="q-text"></div>
+  <div class="quiz-options" id="q-options"></div>
+  <div class="quiz-status" id="q-status"></div>
+</div>
+
+    <div class="card docs">
+      <h1>Understanding Movement Along the Demand Curve vs. Shift in Demand</h1>
+      <p>
+        This lesson explores the difference between movement along the demand curve and 
+        a shift in the demand curve. A movement along the curve occurs when the price of the 
+        good changes, causing a change in the quantity demanded. A shift in demand occurs when 
+        factors other than the good's own price change, such as consumer income, tastes, 
+        or the prices of related goods. The graph uses the demand equation P = a − 2Q, 
+        where Price is on the vertical axis and Quantity is on the horizontal axis. 
+        The intercept a represents the position of the demand curve.
+      </p>
+      <h2>How to Use the Playground</h2>
+      <ul>
+        <li>Drag the dot to move along the current demand curve, changing Price and Quantity together.</li>
+        <li>Use the Price controls ( slider, or +/− buttons (on mobile)) to move along the demand curve.</li>
+        <li>Use the Demand Intercept controls to shift the entire demand curve left or right.</li>
+        <li>Observe how changing Price causes a movement along the curve, while changing the intercept creates 
+          a shift in demand.</li>
+          
+      </ul>
+    </div>
+
+  </div>
+
+</div>
+
+
+<script src="model.js"></script>
+<script src="evaluate.js"></script>
+<script src="graph.js"></script>
+<script src="ghost.js"></script>
+<script src="renderquiz.js"></script>
+
+
+
+<script src="main.js"></script>
+
+</body>
+</html>
