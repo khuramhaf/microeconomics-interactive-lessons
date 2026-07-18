@@ -17,119 +17,74 @@ let qIndex = 0;
    Quantity/Both).
    ========================================================== */
 
-      function getQuantityString() {
-    return String(state.eqQ.toFixed(1));
-}
-
-
-     function getPriceString() {
-    return String(state.eqP.toFixed(1));
-}
-
-
-
-function noHint()
-{
-
-if(this.id === 4){
-qStatusEl.textContent = "Drag the Dot on the Graph to reach the Price = 12";
-}
-
-
-else if(this.id === 5){
-qStatusEl.textContent = "Drag the Dot on the Graph to reach the Quantity = 8";
-}
-
-
-else if(this.id===6){
-qStatusEl.textContent = "Drag the Dot on the Graph to reach the Price = 14 and Quantity = 4";
-}
-
-else{
-
-  qStatusEl.textContent = "No Hint available";
-
-}
-
-  
+   function getQuantityString() {
+    return String(getQuantity().toFixed(1));
 }
 
 const quizQuestions = [
 
-   {
+      {
     "id": 1,
-    "title": "Question 1: Find the Quantity",
-    "prompt": "Set Demand Intercept = 24. What is the equilibrium quantity?",
-    "options": generateQuantityOptions,
-    "correctAnswer": getQuantityString,
-    "validationState": { "demandIntercept": 24 },
+    "title": "Question 1: Find the Intercept",
+    "prompt": "Move the graph until Intercept = 2 on quantity axis.",
+    "validationState": { "intercept": -4 },
     "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": () => animateDemandIntercept(24, 2000)
+    "evaluate": evaluateGraph,
+    "startAnimation":  () => animateIntercept(-4, 1000)
   },
 
 
-     {
+    {
     "id": 2,
-    "title": "Question 2: Find the Price",
-    "prompt": "Set Supply Intercept = 4. What is the equilibrium price?",
-    "options": generatePriceOptions,
-    "correctAnswer": getPriceString,
-    "validationState": { "supplyIntercept": 4 },
+    "title": "Question 2: Find the Intercept",
+    "prompt": "Move the graph until Intercept = 6 on price axis",
+    "validationState": { "intercept": 6 },
     "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": () => animateSupplyIntercept(4, 2000)
+    "evaluate": evaluateGraph,
+    "startAnimation":  () => animateIntercept(6, 1000)
   },
-
-
+  
   {
     "id": 3,
-    "title": "Question 3: Find the Price and Quantity",
-    "prompt": "Set Demand Intercept = 18. Set the Supply Intercept = 1 on Quantity axis What is the equilibrium price and quantity?",
-    "options": ["Price = 5 and Quantity = 5", "Price = 2 and Quantity = 7", "Price = 8 and Quantity = 5", "Price = 24 and Quantity = 10"],
-    "correctAnswer": "Price = 8 and Quantity = 5",
-    "validationState": { "demandIntercept":18, "supplyIntercept": -2 },
+    "title": "Question 3: Find the Quantity",
+    "prompt": "Set Price = $14. What is the quantity demanded?",
+    "options": generateQuantityOptions,
+    "correctAnswer": getQuantityString,
+    "validationState": { "price": 14 },
     "render": renderQuiz,
-    "evaluate": evaluateDoubleGraphandOptions,
-    "startAnimation": noHint
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": () => animatePriceChange(14, 2000)
   },
-
-
-    {
-    "id": 4,
-    "title": "Question 4: Find the Price",
-    "prompt": "Set graph where Equilibrium Price = $12",
-    "validationState": { "price":12 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraph,
-    "startAnimation": noHint
+{
+  id: 4,
+  title: "Question 4: Find the Quantity",
+  prompt: "Set Price = $10 and Intercept = 2 on quantity axis. What is the Quantity Demanded?",
+  options: ["4", "6", "7", "10"],
+  correctAnswer: "7",
+  validationState: {
+    price: 10,
+    intercept: -4
   },
+  render: renderQuiz,
+  evaluate: evaluateDoubleGraphandOptions,
+  startAnimation: () => animatePriceandIntercept(10, -4, 2000)
+},
 
-
-     {
-    "id": 5,
-    "title": "Question 5: Find the Quantity",
-    "prompt": "Set graph where Equilibrium Quantity = 8",
-    "validationState": { "quantity":8 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraph,
-    "startAnimation": noHint
+{
+  id: 5,
+  title: "Question 5: Find the Quantity",
+  prompt: "Set Price = $12 and Intercept = 4 on the price axis. What is the Quantity Demanded?",
+  options: ["12", "4", "5", "2"],
+  correctAnswer: "4",
+  validationState: {
+    price: 12,
+    intercept: 4
   },
-
-
-    {
-    "id": 6,
-    "title": "Question 6: Find the Price and Quantity",
-    "prompt": "Set graph where Equilibrium Price = 14 and Equilibrium Quantity = 4",
-    "validationState": { "price": 14, "quantity": 4 },
-    "render": renderQuiz,
-    "evaluate": evaluateDoubleGraph,
-    "startAnimation": noHint
-  },
-
-
-
-   
+  render: renderQuiz,
+  evaluate: evaluateDoubleGraphandOptions,
+  startAnimation: () => animatePriceandIntercept(12, 4, 2000)
+}
+  
 ];
 
 
@@ -241,43 +196,7 @@ function renderQuiz() {
 
 
 function generateQuantityOptions() {
-    const correctQty = Number(state.eqQ.toFixed(1));
-    const options = new Set();
-    options.add(correctQty);
-
-    let attempts = 0;
-    while (options.size < 4 && attempts < 100) {
-        // Generates a random decimal offset between -4.0 and +4.0
-        let offset = (Math.random() * 8) - 4; 
-
-        // Avoid an offset of practically zero to ensure we get a different number
-        if (Math.abs(offset) < 0.1) continue;
-
-        // Add the offset and round it strictly to 1 decimal place
-        const qty = Number((correctQty + offset).toFixed(1));
-
-        if (qty >= 0) {
-            options.add(qty);
-        }
-        
-        attempts++; 
-    }
-
-    // Fallback: If we still need options, increment by random decimal steps
-    while (options.size < 4) {
-        let fallbackOffset = Math.random() * 5 + 1; // Random step between 1.0 and 6.0
-        options.add(Number((correctQty + fallbackOffset).toFixed(1)));
-    }
-
-    // Shuffle and return
-    return [...options].sort(() => Math.random() - 0.5);
-}
-
-
-
-
-function generatePriceOptions() {
-    const correctQty = Number(state.eqP.toFixed(1));
+    const correctQty = Number(getQuantity().toFixed(1));
     const options = new Set();
     options.add(correctQty);
 

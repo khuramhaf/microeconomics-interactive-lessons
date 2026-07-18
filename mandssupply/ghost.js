@@ -1,18 +1,3 @@
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 function animatePriceChange(newPrice, duration) {
 
     // Stop previous animation
@@ -77,14 +62,14 @@ function animatePriceChange(newPrice, duration) {
 }
 
 
-function animateDemandIntercept(targetIntercept, duration = 2000) {
+function animateIntercept(targetIntercept, duration = 2000) {
 
 
     g.selectAll(".ghost-layer")
         .interrupt()
         .remove();
 
-    const startIntercept = state.demandIntercept;
+    const startIntercept = state.intercept;
 
     const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
 
@@ -117,75 +102,13 @@ function animateDemandIntercept(targetIntercept, duration = 2000) {
                 const p1 = intercept;
 
                 const q2 = 13;      // or your graph's maximum quantity
-                const p2 = intercept - 2 * q2;
+                const p2 = intercept + state.slope * q2;
 
                 ghostCurve
-                    .attr("x1", xScale(0))
-                    .attr("y1", yScale(intercept))
-                    .attr("x2", xScale(intercept / 2))
-                    .attr("y2", yScale(0));
-
-            };
-
-        })
-        .on("end", () => {
-            ghostGroup
-                .transition()
-                .delay(1000)
-                .remove();
-        });
-
-}
-
-
-
-
-function animateSupplyIntercept(targetIntercept, duration = 2000) {
-
-
-    g.selectAll(".ghost-layer")
-        .interrupt()
-        .remove();
-
-    const startIntercept = state.supplyIntercept;
-
-    const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
-
-    if (!moveIntercept) return;
-
-    const ghostGroup = g.append("g")
-        .attr("class", "ghost-layer");
-
-    const ghostCurve = ghostGroup.append("line")
-        .attr("class", "demand-line")
-        .attr("opacity", 0.55);
-
-    const interceptInterp = d3.interpolateNumber(
-        startIntercept,
-        targetIntercept
-    );
-
-    ghostGroup
-        .transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("hint", () => {
-
-            return function (t) {
-
-                const intercept = interceptInterp(t);
-
-               const q1 = 0;
-const p1 = intercept;
-
-const q2 = 13;
-const p2 = intercept + 2 * q2;
-
-ghostCurve
-    .attr("x1", xScale(q1))
-    .attr("y1", yScale(p1))
-    .attr("x2", xScale(q2))
-    .attr("y2", yScale(p2));
+                    .attr("x1", xScale(q1))
+                    .attr("y1", yScale(p1))
+                    .attr("x2", xScale(q2))
+                    .attr("y2", yScale(p2));
 
             };
 

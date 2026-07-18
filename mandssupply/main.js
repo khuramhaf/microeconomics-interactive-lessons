@@ -1,48 +1,63 @@
-/* ============================================================
-   MAIN
-   Owns the DOM input elements and wires them to model.js.
-   Also owns renderAll(), the single orchestrator that graph.js's
-   drag handlers and this file's input handlers both call after
-   any model change: render the graph, then sync the inputs.
-   ============================================================ */
-
-/* ---------- DOM refs ---------- */
-// Demand controls
-const priceRange = document.getElementById("price-range");
-const pricedota = document.getElementById("price-number-dota");
-const qtydota = document.getElementById("qty-number-dota");
+/* ==========================================================
+   DOM control wiring + the master render loop + app startup.
+   Loads LAST — this is the one file allowed to know about every
+   other piece (model, graph, ghost, quiz) and wire them together.
+   REQUIRES: model.js, validation.js, graph.js, ghost.js, quiz.js
+   ========================================================== */
 
 
-// Supply controls
-const qtyRange = document.getElementById("qty-range");
-const pricedotb = document.getElementById("price-number-dotb");
-const qtydotb = document.getElementById("qty-number-dotb");
+        const inputPriceNum = d3.select("#price-number");
+        const inputPriceSlider = d3.select("#price-range");
+        
+        const inputInterceptNum = d3.select("#qty-number");
+        const inputInterceptSlider = d3.select("#qty-range");
 
+         const inputPriceNumM = d3.select("#price-number-m");
+        
+        
+        const inputInterceptNumM = d3.select("#qty-number-m");
 
-const pricedotam = document.getElementById("price-number-dota-m");
-const qtydotam = document.getElementById("qty-number-dota-m");
-
-const pricedotbm = document.getElementById("price-number-dotb-m");
-const qtydotbm = document.getElementById("qty-number-dotb-m");
-
-
-
-
-
-const priceMinus = document.getElementById("price-minus");
-const pricePlus = document.getElementById("price-plus");
-const qtyPlus = document.getElementById("qty-plus");
-const qtyMinus = document.getElementById("qty-minus");
-
+        
 
 const revenueDisplay = document.getElementById("revenue-display");
 const equationDisplay = document.getElementById("equation-display");
 
-const STEP = 0.2; // amount changed per +/- click
+/* ---------- single source of truth for "should the ghost restart" ----------
+   Previously this same isDragging-check (plus an isTyping-check in one
+   spot) was duplicated across 3 evaluator functions and render(), and
+   one copy was missing the isTyping check — a real inconsistency bug.
+   Now every caller (graph.js's drag handler, quiz.js's evaluators,
+   renderAll below) goes through this one function. */
 
 
-/* step binder */
 
+
+/* ---------- desktop + mobile input wiring ---------- */
+
+inputInterceptNum.on("input", function() { handleInterceptChange(this.value); });
+        inputInterceptSlider.on("input", function() { handleInterceptChange(this.value); });
+        inputPriceNum.on("input", function() { handlePriceChange(this.value); });
+        inputPriceSlider.on("input", function() { handlePriceChange(this.value); });
+
+        inputPriceNumM.on("input", function() { handlePriceChange(this.value); });
+        
+        
+        inputInterceptNumM.on("input", function() { handleInterceptChange(this.value); });
+
+
+/* ---------- long-press stepper buttons (mobile +/-) ---------- */
+
+const priceMinus = d3.select("#price-minus");
+        
+        
+        const pricePlus = d3.select("#price-plus");
+
+
+        const qtyMinus = d3.select("#qty-minus");
+        
+        
+        const qtyPlus = d3.select("#qty-plus");
+       
 
 function bindStepper(btn, dir, type) {
   const HOLD_DELAY = 300;
@@ -56,13 +71,14 @@ function bindStepper(btn, dir, type) {
   let cancelled = false;
   let activePointerId = null;
 
+  // Extract the raw DOM element from the D3 selection
+  const rawElement = btn.node(); 
+
   function step() {
-    if (type === "price") {
-      adjustDemandIntercept(dir); 
-    } else {
-      adjustSupplyIntercept(dir);  
-    }
-    render();
+    if (type === "price") handlePriceChange(state.P + dir * P_STEP);
+    else handleInterceptChange(state.intercept + dir * Q_STEP);
+
+    console.log(state.P)
   }
 
   function clearAll() {
@@ -73,8 +89,11 @@ function bindStepper(btn, dir, type) {
   }
 
   function finish() {
-    if (activePointerId !== null) {
-      try { btn.releasePointerCapture(activePointerId); } catch (err) {}
+    if (activePointerId !== null && rawElement) {
+      try { 
+        // FIX: Called on rawElement instead of btn
+        rawElement.releasePointerCapture(activePointerId); 
+      } catch (err) {}
     }
     clearAll();
     cancelled = false;
@@ -82,13 +101,14 @@ function bindStepper(btn, dir, type) {
     activePointerId = null;
   }
 
-  btn.addEventListener("pointerdown", e => {
+  btn.on("pointerdown", e => {
     if (!e.isPrimary || activePointerId !== null) return;
     activePointerId = e.pointerId;
-    btn.setPointerCapture(e.pointerId);
     
-    // CRITICAL: Block default actions for all pointer types to kill ghost clicks
-    e.preventDefault(); 
+    // FIX: Called on rawElement instead of btn
+    if (rawElement) rawElement.setPointerCapture(e.pointerId);
+    
+    if (e.pointerType === "mouse") e.preventDefault();
 
     startX = e.clientX;
     startY = e.clientY;
@@ -103,7 +123,7 @@ function bindStepper(btn, dir, type) {
     }, HOLD_DELAY);
   });
 
-  btn.addEventListener("pointermove", e => {
+  btn.on("pointermove", e => {
     if (e.pointerId !== activePointerId || cancelled) return;
     const dx = Math.abs(e.clientX - startX);
     const dy = Math.abs(e.clientY - startY);
@@ -113,21 +133,14 @@ function bindStepper(btn, dir, type) {
     }
   });
 
-  btn.addEventListener("pointerup", e => {
+  btn.on("pointerup", e => {
     if (e.pointerId !== activePointerId) return;
-    
-    // CRITICAL: Prevent default browser behavior here too
-    e.preventDefault(); 
-    
     if (!cancelled && !longPress) step();
     finish();
   });
 
-  btn.addEventListener("pointercancel", finish);
-  btn.addEventListener("blur", finish);
-  
-  // CRITICAL: Completely kill any native click events hitting this button element
-  btn.addEventListener("click", e => e.preventDefault());
+  btn.on("pointercancel", finish);
+  btn.on("blur", finish);
 }
 
 bindStepper(priceMinus, -1, "price");
@@ -135,115 +148,102 @@ bindStepper(pricePlus, 1, "price");
 bindStepper(qtyMinus, -1, "qty");
 bindStepper(qtyPlus, 1, "qty");
 
+ /*---------- master render: syncs every DOM element to `state` ---------- */
 
-/* ---------- orchestrator ---------- */
-window.render = function() {
-  const s = window.state;
+let rafPending = false;
+let latestState = null;
 
+function renderAll() {
+    if (typeof qStatusEl !== "undefined") qStatusEl.textContent = "";
+    latestState = { intercept: state.intercept, P: state.P };
+    doRender(latestState);
+}
 
-const curveData = getSupplyCurveData();
-supplyPath.datum(curveData).attr("d", lineGen);
-supplyHitbox.datum(curveData).attr("d", lineGen);
-  // 1. Map data spaces to pixel spaces
-  const ax = xScale(s.qtyA);
-  const ay = yScale(s.priceA);
-  const bx = xScale(s.qtyB);
-  const by = yScale(s.priceB);
+function doRender({ intercept, P }) {
+    // 1. Calculate active Quantity from your updated Supply formula
+    const currentQ = getQuantity();
+    state.Q = currentQ; // Synchronize state.Q
 
-  // 2. Position Dot A and its projections
-  dotA.attr("cx", ax).attr("cy", ay);
-  labelA.attr("x", ax).attr("y", ay);
-  projLineAX.attr("x1", ax).attr("y1", ay).attr("x2", ax).attr("y2", innerH);
-  projLineAY.attr("x1", ax).attr("y1", ay).attr("x2", 0).attr("y2", ay);
-
-  // 3. Position Dot B and its projections
-  dotB.attr("cx", bx).attr("cy", by);
-  labelB.attr("x", bx).attr("y", by);
-  projLineBX.attr("x1", bx).attr("y1", by).attr("x2", bx).attr("y2", innerH);
-  projLineBY.attr("x1", bx).attr("y1", by).attr("x2", 0).attr("y2", by);
-
-  // 4. Update optional DOM text metric display if elements exist
-
-   const dStr = state.priceA.toFixed(2);
-   const dStr1 = state.qtyA.toFixed(2);
-  const sStr = state.priceB.toFixed(2);
-  const sStr1 = state.qtyB.toFixed(2);
-
-  // Demand controls
-  if (document.activeElement !== pricedota && pricedota) pricedota.value = dStr;
-  if (document.activeElement !== qtydota && qtydota) qtydota.value = dStr1;
-   if (document.activeElement !== pricedotam && pricedotam) pricedotam.value = dStr;
-  if (document.activeElement !== qtydotam && qtydotam) qtydotam.value = dStr1;
-  if (priceRange) priceRange.value = dStr;
-
-  // Supply controls
-  if (document.activeElement !== pricedotb && pricedotb) pricedotb.value = sStr;
-  if (document.activeElement !== qtydotb && qtydotb) qtydotb.value = sStr1;
-   if (document.activeElement !== pricedotbm && pricedotbm) pricedotbm.value = sStr;
-  if (document.activeElement !== qtydotbm && qtydotbm) qtydotbm.value = sStr1;
-  if (qtyRange) qtyRange.value = sStr;
-
-
-
-
-
-// 4. Update DOM text metric display
-const elDoc = document.getElementById("revenue-display");
-if (elDoc) {
-  const elType = document.getElementById("equation-display");
-  
-  if (isNaN(state.elasticity) || !isFinite(state.elasticity)) {
-    elDoc.innerText = "N/A";
-    elType.innerText = "Undefined";
-  } else {
-    // 1. Calculate the absolute value
-    const absE = Math.abs(state.elasticity);
-    
-    // 2. Round it to 2 decimal places so the logic MATCHES the screen
-    const roundedAbsE = Math.round(absE * 100) / 100;
-    
-    // Display the signed elasticity value
-    elDoc.innerText = state.elasticity.toFixed(2);
-    
-    // 3. Evaluate using the rounded value
-    if (roundedAbsE > 1) {
-      elType.innerText = "Elastic (Highly Responsive)";
-    } else if (roundedAbsE < 1) {
-      elType.innerText = "Inelastic (Low Responsiveness)";
-    } else {
-      elType.innerText = "Unit Elastic";
+    // Display string fixed to match standard supply form: P = Intercept + 2(Q)
+    if (typeof equationDisplay !== "undefined") {
+        equationDisplay.textContent = `${state.P.toFixed(1)} = ${state.intercept.toFixed(1)} + 2(${state.Q.toFixed(1)})`;
     }
-  }
+    if (typeof revenueDisplay !== "undefined") {
+        revenueDisplay.textContent = "Quantity: " + state.Q.toFixed(2);
+    }
+
+    // Set correct input slider dynamic minimum floor constraints for supply
+    const newMinPrice = Math.max(0, intercept);
+    if (typeof inputPriceNum !== "undefined" && inputPriceNum.property("min") !== newMinPrice) {
+        inputPriceNum.attr("min", Number(newMinPrice.toFixed(1)));
+        inputPriceSlider.attr("min", Number(newMinPrice.toFixed(1)));
+    }
+
+    // Dynamic UI updates
+    if (typeof inputInterceptNum !== "undefined") {
+        inputInterceptNum.property("value", Number(intercept.toFixed(1)));
+        inputInterceptSlider.property("value", Number(intercept.toFixed(1)));
+        inputPriceNum.property("value", Number(P.toFixed(1)));
+        inputPriceSlider.property("value", Number(P.toFixed(1)));
+    }
+    if (typeof inputPriceNumM !== "undefined") {
+        inputPriceNumM.property("value", Number(P.toFixed(1)));
+    }
+    if (typeof inputInterceptNumM !== "undefined") {
+        inputInterceptNumM.property("value", Number(intercept.toFixed(1)));
+    }
+
+    // 2. Render the endpoints of the supply line based on chart limits
+    let qStart = 0;
+    let pStart = Math.max(0, state.intercept);
+
+    if (state.intercept < 0) {
+        // If intercept is negative, find the exact horizontal intercept on the Q axis
+        qStart = -state.intercept / state.slope;
+        pStart = 0;
+    }
+
+    let qEnd = Q_MAX;
+    let pEnd = (state.slope * Q_MAX) + state.intercept;
+    if (pEnd > P_MAX) {
+        pEnd = P_MAX;
+        qEnd = (P_MAX - state.intercept) / state.slope;
+    }
+
+    // Update coordinates
+    supplyLineVisible
+        .attr("x1", xScale(qStart)).attr("y1", yScale(pStart))
+        .attr("x2", xScale(qEnd)).attr("y2", yScale(pEnd));
+
+    supplyLineHitbox
+        .attr("x1", xScale(qStart)).attr("y1", yScale(pStart))
+        .attr("x2", xScale(qEnd)).attr("y2", yScale(pEnd));
+
+    // 3. Render Dot Position
+    dot.attr("cx", xScale(state.Q)).attr("cy", yScale(state.P));
+
+    // 4. Render Projection Guidelines
+    xDropLine
+        .attr("x1", xScale(state.Q)).attr("y1", yScale(state.P))
+        .attr("x2", xScale(state.Q)).attr("y2", innerH);
+
+    yDropLine
+        .attr("x1", xScale(state.Q)).attr("y1", yScale(state.P))
+        .attr("x2", 0).attr("y2", yScale(state.P));
+
+    // Quiz rendering trigger preservation
+    if (typeof quizQuestions !== "undefined" && typeof qIndex !== "undefined") {
+        if (typeof quizQuestions[qIndex].options === "function") {
+            quizQuestions[qIndex].options();
+            quizQuestions[qIndex].render();
+        }
+    }
 }
-};
-
-// Initial Render
-window.render();
 
 
-/* ---------- input listeners ---------- */
-// Every handler here calls a model.js mutator, then renderAll().
-// No handler ever touches `state` directly.
-function initInputListeners() {
-  // Demand
-  const handleDemandChange = (val) => {
-    window.updateDotA(val);
-    render();
-  };
-  if (priceRange) priceRange.addEventListener("input", (e) => handleDemandChange(e.target.value));
-  if (pricedota) pricedota.addEventListener("input", (e) => handleDemandChange(e.target.value));
-  if (qtydota) qtydota.addEventListener("input", (e) => handleDemandChange(e.target.value));
-  
 
-  // Supply
-  const handleSupplyChange = (val) => {
-    window.updateDotB(val);
-    render();
-  };
-  if (qtyRange) qtyRange.addEventListener("input", (e) => handleSupplyChange(e.target.value));
-  if (pricedotb) pricedotb.addEventListener("input", (e) => handleSupplyChange(e.target.value));
-  if (qtydotb) qtydotb.addEventListener("input", (e) => handleSupplyChange(e.target.value));
-  
-}
 
-initInputListeners()
+/* ---------- kick things off ---------- */
+
+quizQuestions[qIndex].render();
+renderAll();

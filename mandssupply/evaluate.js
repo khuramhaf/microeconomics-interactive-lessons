@@ -16,17 +16,17 @@ const VALIDATION_TOLERANCE = {
   price: 0.05,
   quantity: 0.05,
   totalRevenue: 0.5,
-  demandIntercept: 0.05,
-  supplyIntercept: 0.05 // Easily add future field tolerances here
+  intercept: 0.05 // Easily add future field tolerances here
 };
 
+// Maps the validation target keys to the current state keys
 const STATE_KEY_MAP = {
-  price: 'eqP',
-  quantity: 'eqQ',
-  demandIntercept: 'demandIntercept',
-  supplyIntercept: 'supplyIntercept', // Adjusted to match your state & tolerance key
-  totalRevenue: 'totalRevenue'        // Make sure to add this to your state if you use it!
+  price: 'P',
+  quantity: 'Q',
+  totalRevenue: 'R',
+  intercept: 'intercept' // Future-proofed mapping
 };
+
 
 function checkStateValidation(question, state) {
   const target = question.validationState;
@@ -113,30 +113,6 @@ function evaluateGraphandOptions(chosenAnswer) {
 }
 
 
-
-function evaluateDoubleGraph() {
-
-    const conditions = {
-        isPriceCorrect: state.eqP === this.validationState.price,
-        isInterceptCorrect: state.eqQ === this.validationState.quantity,
-    };
-
-    // FIXED: Changed isAnswertCorrect to isAnswerCorrect
-    const outcomeKey = `${conditions.isPriceCorrect}_${conditions.isInterceptCorrect}`;
-
-    const outcomeMessages = {
-        "true_true": "Answer is ✓ Correct",
-        "false_true": "The Price on the graph is incorrect.",
-        "true_false": "The Quantity on the graph is incorrect.",
-        "false_false": "The Price and the Quantity on Graph are incorrect."
-    };
-
-    qStatusEl.textContent =
-        outcomeMessages[outcomeKey] ||
-        "The graph state is incorrect.";
-}
-
-
 function evaluateDoubleGraphandOptions(chosenAnswer) {
     const question = quizQuestions[qIndex];
 
@@ -146,9 +122,9 @@ function evaluateDoubleGraphandOptions(chosenAnswer) {
             : question.correctAnswer;
 
     const conditions = {
-        isPriceCorrect: state.demandIntercept === question.validationState.demandIntercept,
-        isInterceptCorrect: state.supplyIntercept === question.validationState.supplyIntercept,
-        isAnswerCorrect: chosenAnswer === correctAnswer,
+        isPriceCorrect: state.P === question.validationState.price,
+        isInterceptCorrect: state.intercept === question.validationState.intercept,
+        isAnswerCorrect: parseFloat(chosenAnswer) === parseFloat(correctAnswer),
     };
 
     // FIXED: Changed isAnswertCorrect to isAnswerCorrect
@@ -156,13 +132,13 @@ function evaluateDoubleGraphandOptions(chosenAnswer) {
 
     const outcomeMessages = {
         "true_true_true": "Answer is ✓ Correct",
-        "false_true_true": "The Demand Intercept on the graph is incorrect.",
-        "true_false_true": "The Supply intercept on the graph is incorrect.",
+        "false_true_true": "The price on the graph is incorrect.",
+        "true_false_true": "The intercept on the graph is incorrect.",
         "true_true_false": "Please select the correct option.",
-        "false_false_true": "The Demand and Supply Intercepts on graph are incorrect.",
-        "false_true_false": "The Demand Intercept and selected option are incorrect.", // Note: Your message says intercept, but key implies price is false, intercept is true, answer is false. You might want to double-check this string's text!
-        "true_false_false": "The Supply intercept and selected options are incorrect.",
-        "false_false_false": "The Demand and Supply intercepts, and selected option are all incorrect."
+        "false_false_true": "The price and intercept on graph are incorrect.",
+        "false_true_false": "The Price and selected option are incorrect.", // Note: Your message says intercept, but key implies price is false, intercept is true, answer is false. You might want to double-check this string's text!
+        "true_false_false": "The intercept and selected options are incorrect.",
+        "false_false_false": "The price, intercept, and selected option are all incorrect."
     };
 
     qStatusEl.textContent =
