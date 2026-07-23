@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Price Elasticity of Demand — Interactive Lesson</title>
+<title>Price Elasticity of Supply — Interactive Lesson</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <style>
   :root{
@@ -98,6 +98,17 @@
     stroke:var(--accent-dark);
     stroke-width:4px; /* Increased line stroke width */
   }
+
+   .demand-line-hitbox {
+  stroke: transparent;
+  stroke-width: 24px;
+  cursor: grab;
+  fill: none;
+ 
+}
+.demand-line-hitbox:active {
+            cursor: grabbing;
+        }
   .proj-line{
     stroke:var(--proj);
     stroke-width:2px; /* Increased line stroke width */
@@ -447,15 +458,6 @@
   }
 </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NWMTQ6GCX5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NWMTQ6GCX5');
-</script>
 <body>
 
 <div class="app">
@@ -475,7 +477,7 @@
       </div>
       <div class="data-block">
 
-        <div class="label">Elasticity (PED)</div>
+        <div class="label">Elasticity (PES)</div>
         
         <div class="value" id="revenue-display">Revenue: 50</div>
       </div>
@@ -506,6 +508,19 @@
           </div>
           <input type="range" id="qty-range" min="0" max="20" step="0.2" value="10">
         </div>
+
+
+        <div class="control-block">
+          <div class="control-top">
+            <label for="intercept">Intercept</label>
+            
+            <input type="number" id="intercept-number" min="-6" max="6" step="0.2" value="0">
+
+            
+          </div>
+          <input type="range" id="intercept-range" min="-6" max="6" step="0.2" value="0">
+        </div>
+
       </div>
     </div>
 
@@ -572,6 +587,26 @@
     <button class="step-btn" id="qty-plus" type="button">+</button>
 
 </div>
+
+
+<div class="stepper-row">
+
+    <button class="step-btn" id="intercept-minus" type="button">−</button>
+
+    <span>Intercept</span>
+
+    <input
+        type="number"
+        id="intercept-number-m"
+        min="-6"
+        max="6"
+        step="0.2"
+        value="0">
+
+
+    <button class="step-btn" id="intercept-plus" type="button">+</button>
+
+</div>
 <!--new code end-->
     </div>
 
@@ -600,8 +635,8 @@
     
   </div>
   <div>
+        <span style="font-size: 25px; text-align: center; display: block;">Coming Soon</span>
 
-    <span style="font-size: 25px; text-align: center; display: block;">Coming Soon</span>
   
   <div class="quiz-question" id="q-text"></div>
   <div class="quiz-options" id="q-options"></div>
@@ -610,28 +645,30 @@
 </div>
 
     <div class="card docs">
-```html
-<h1>Understanding Price Elasticity of Demand</h1>
+   
+
+<h1>Understanding Price Elasticity of Supply</h1>
 
 <p>
-  This interactive lesson explores how the <strong>Price Elasticity of Demand (PED)</strong>
-  changes along a demand curve. The lesson uses the <strong>percentage change
-  formula</strong> shown below to calculate elasticity.
+  This interactive lesson explores how the <strong>Price Elasticity of Supply (PES)
+
+  </strong> changes along a supply curve. The lesson uses the <strong>percentage change 
+    formula</strong> shown below to calculate elasticity.
 </p>
-
 <br/>
-
 <p style="text-align:center;">
-  <strong>Price Elasticity of Demand = Percentage Change in Quantity Demanded ÷ Percentage Change in Price</strong>
+  <strong>Price Elasticity of Supply = Percentage Change in Quantity Supplied ÷ Percentage Change in Price</strong>
 </p>
-
 <br/>
 
 <p>
-  <strong>Point A</strong> represents the <strong>old (initial)</strong> point and
-  <strong>Point B</strong> represents the <strong>new</strong> point. Move the points
-  to see how price, quantity demanded, percentage changes, and elasticity update
-  in real time.
+  You can <strong>adjust the intercept of the supply curve</strong> and observe how
+  elasticity changes at different points. The lesson uses the
+  <strong>percentage formula</strong>, where <strong>Point A</strong> represents the
+  <strong>old (initial)</strong> point and <strong>Point B</strong> represents the
+  <strong>new</strong> point. Move the points or adjust the intercept to see how
+  price, quantity supplied, percentage changes, and elasticity update in real
+  time.
 </p>
 
 <br/>
@@ -639,13 +676,14 @@
 <h2>How to Use the Playground</h2>
 
 <ul>
-  <li>Drag <strong>Point A</strong> and <strong>Point B</strong> along the demand curve.</li>
+  <li>Drag <strong>Point A</strong> and <strong>Point B</strong> along the supply curve.</li>
 
-  <li>Observe how the <strong>Price Elasticity of Demand</strong> changes in real time.</li>
+  <li>Adjust the <strong>intercept of the supply curve</strong> to shift the supply curve.</li>
 
-  <li>Compare elasticity at different locations on the demand curve.</li>
+  <li>Observe how the <strong>Price Elasticity of Supply</strong> changes in real time.</li>
+
+  <li>Compare elasticity at different locations and for different supply curve intercepts.</li>
 </ul>
-```
 
     </div>
 
@@ -658,6 +696,7 @@
 <script src="model.js"></script>
 
 <script src="graph.js"></script>
+
 <script src="main.js"></script>
 
 </body>
