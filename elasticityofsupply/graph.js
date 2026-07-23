@@ -64,7 +64,7 @@ const supplyHitbox = g.append("path")
   .attr("fill", "none")
   .attr("stroke", "transparent")
   .attr("stroke-width", 24)
-  .style("cursor", "ns-resize")
+  .style("cursor", "grab")
   .attr("class", "demand-line-hitbox");
 
 let dragStartOffset = 0;

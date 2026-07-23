@@ -52,11 +52,13 @@ g.append("text").attr("class", "axis-label")
 
 const demandGroup = g.append("g");
         
-        const demandLineHitbox = demandGroup.append("line")
-            .attr("class", "demand-line-hitbox");
+        
 
         const demandLineVisible = demandGroup.append("line")
             .attr("class", "demand-line");
+
+            const demandLineHitbox = demandGroup.append("line")
+            .attr("class", "demand-line-hitbox");
 
 
              const xDropLine = g.append("line").attr("class", "proj-line");

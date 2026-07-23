@@ -33,12 +33,14 @@ g.append("text").attr("class", "axis-label")
 /* ---------- supply curve elements ---------- */
 const supplyGroup = g.append("g");
         
-const supplyLineHitbox = supplyGroup.append("line")
-    .attr("class", "demand-line-hitbox");
+
 
 const supplyLineVisible = supplyGroup.append("line")
     .attr("class", "supply-line")
     .attr("stroke", "red"); 
+
+    const supplyLineHitbox = supplyGroup.append("line")
+    .attr("class", "demand-line-hitbox");
 
 const xDropLine = g.append("line").attr("class", "proj-line");
 const yDropLine = g.append("line").attr("class", "proj-line");

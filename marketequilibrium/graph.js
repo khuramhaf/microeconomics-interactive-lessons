@@ -54,18 +54,20 @@ g.append("path")
 
 /* ---------- interactive elements ---------- */
 
-const priceDragHitbox = g.append("line")
-  .attr("class", "price-line")
-  .style("stroke-width", "24px")        // Generous grab area
-  .style("stroke", "transparent")       // Invisible to the user    // Captures clicks/drags anywhere on the thick stroke
-  .style("cursor", "ns-resize");
+
 
 // Draggable horizontal price line
 const priceDragLine = g.append("line")
   .attr("class", "price-line")
   .style("stroke-width", "5px")
-  .style("cursor", "ns-resize")
+  .style("cursor", "grab")
   .attr("stroke", "#ff9800");
+
+  const priceDragHitbox = g.append("line")
+  .attr("class", "price-line")
+  .style("stroke-width", "24px")        // Generous grab area
+  .style("stroke", "transparent")       // Invisible to the user    // Captures clicks/drags anywhere on the thick stroke
+  .style("cursor", "grab");
 
 
   
