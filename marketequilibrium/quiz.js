@@ -35,7 +35,7 @@ const quizQuestions = [
    {
     "id": 2,
     "title": "Question 2: Find the Equilibrium",
-    "prompt": "Find the Equilibrium. What is the Price and Quantity at Equilibrium?",
+    "prompt": "Move the graph until it reaches Equilibrium. What is the Price and Quantity at Equilibrium?",
     "options": ["Price = $2 and Quantity = 5", "Price = $5 and Quantity = 10", "Price = $10 and Quantity = 5", "Price = $3 and Quantity = 9"],
     "correctAnswer": "Price = $10 and Quantity = 5",
     "validationState": { "price": 10 },

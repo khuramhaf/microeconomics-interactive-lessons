@@ -173,7 +173,7 @@ function doRender({ intercept, P }) {
 
 
 
-     equationDisplay.textContent = `${state.P.toFixed(1)} = ${state.intercept.toFixed(1)} − 2(${currentQ.toFixed(1)})`;
+     equationDisplay.textContent = `P = ${state.intercept.toFixed(1)} − 2(${currentQ.toFixed(1)}) = ${state.P.toFixed(1)}`;
   revenueDisplay.textContent = "Quantity: " + currentQ.toFixed(2);
 
     // Only touch max/value if they actually changed

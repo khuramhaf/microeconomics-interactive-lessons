@@ -166,7 +166,7 @@ function doRender({ intercept, P }) {
 
     // Display string fixed to match standard supply form: P = Intercept + 2(Q)
     if (typeof equationDisplay !== "undefined") {
-        equationDisplay.textContent = `${state.P.toFixed(1)} = ${state.intercept.toFixed(1)} + 2(${state.Q.toFixed(1)})`;
+        equationDisplay.textContent = `P = ${state.intercept.toFixed(1)} + 2(${state.Q.toFixed(1)}) = ${state.P.toFixed(1)}`;
     }
     if (typeof revenueDisplay !== "undefined") {
         revenueDisplay.textContent = "Quantity: " + state.Q.toFixed(2);

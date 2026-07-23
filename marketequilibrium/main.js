@@ -171,6 +171,7 @@ function renderAll() {
 
   // Update the horizontal price slider visibility boundary
   priceDragLine.attr("x1", 0).attr("y1", cy).attr("x2", innerW).attr("y2", cy);
+  priceDragHitbox.attr("x1", 0).attr("y1", cy).attr("x2", innerW).attr("y2", cy);
 
   // Update dots positioning on top of respective lines
   demandDot.attr("cx", cxD).attr("cy", cy);

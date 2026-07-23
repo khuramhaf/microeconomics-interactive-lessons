@@ -57,8 +57,8 @@ const demandPath = g.append("path").attr("class", "demand-line").style("stroke",
 const supplyPath = g.append("path").attr("class", "demand-line").style("stroke", "red")
 
 // Invisible thick overlay paths for easier touch/drag targeting
-const demandDragArea = g.append("path").style("fill", "none").style("stroke", "transparent").style("stroke-width", "20px").style("cursor", "grab");
-const supplyDragArea = g.append("path").style("fill", "none").style("stroke", "transparent").style("stroke-width", "20px").style("cursor", "grab");
+const demandDragArea = g.append("path").style("fill", "none").style("stroke", "transparent").style("stroke-width", "24px").style("cursor", "grab");
+const supplyDragArea = g.append("path").style("fill", "none").style("stroke", "transparent").style("stroke-width", "24px").style("cursor", "grab");
 
 // Projections from equilibrium to axes
 const eqLineX = g.append("line").style("stroke", "#666").attr("class", "proj-line");
