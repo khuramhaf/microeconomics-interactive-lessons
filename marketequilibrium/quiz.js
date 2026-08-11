@@ -60,7 +60,7 @@ const quizQuestions = [
   {
     "id": 4,
     "title": "Question 4: Find the Shortage",
-    "prompt": "Find the Point where Shortage is exactly 4 Units",
+    "prompt": "Find the point where Shortage is exactly 4 Units",
     "validationState": { "price": 6 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
