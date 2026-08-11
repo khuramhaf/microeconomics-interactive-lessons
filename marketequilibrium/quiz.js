@@ -49,7 +49,7 @@ const quizQuestions = [
   {
     "id": 3,
     "title": "Question 3: Find the Market Condition",
-    "prompt": "Set Price = $14. What is the Market Condition?",
+    "prompt": "Set the Price = $14. What is the Market Condition?",
     "options": ["Shortage", "Surplus", "Equilibrium"],
     "correctAnswer": "Surplus",
     "validationState": { "price": 14 },
@@ -68,8 +68,8 @@ const quizQuestions = [
   },
   {
     "id": 5,
-    "title": "Question 5: Find the Sruplus",
-    "prompt": "Find the Point where Sruplus is exactly 8 Units",
+    "title": "Question 5: Find the Surplus",
+    "prompt": "Find the point where Surplus is exactly 8 Units",
     "validationState": { "price": 18 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
@@ -79,8 +79,8 @@ const quizQuestions = [
 
    {
     "id": 6,
-    "title": "Question 6: Find the Maximam Sruplus",
-    "prompt": "Find the Point where Sruplus is Maximam",
+    "title": "Question 6: Find the Maximum Surplus",
+    "prompt": "Find the point where Surplus is Maximum",
     "validationState": { "price": 20 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
@@ -90,8 +90,8 @@ const quizQuestions = [
 
    {
     "id": 7,
-    "title": "Question 7: Find the Maximam Sruplus",
-    "prompt": "Find the Point where Shortage is Maximam",
+    "title": "Question 7: Find the Maximum Shortage",
+    "prompt": "Find the point where Shortage is Maximum",
     "validationState": { "price": 0 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
