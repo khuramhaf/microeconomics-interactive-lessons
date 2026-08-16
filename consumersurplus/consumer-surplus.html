@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>Law of Demand — Interactive Lesson</title>
+<title>Consumer Surplus — Interactive Lesson</title>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/7.9.0/d3.min.js"></script>
 <style>
   :root{
@@ -145,7 +145,7 @@
     color:var(--accent-dark);
   }
   /* Keep original font size for calculated Equation and Revenue on desktop */
-  #equation-display, #revenue-display {
+  #base-display, #height-display {
     font-size: 18px;
   }
 
@@ -436,15 +436,6 @@
   }
 </style>
 </head>
-<!-- Google tag (gtag.js) -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-NWMTQ6GCX5"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  gtag('config', 'G-NWMTQ6GCX5');
-</script>
 <body>
 
 <div class="app">
@@ -458,12 +449,12 @@
 
     <div class="card data-row">
       <div class="data-block">
-        <div class="label">Active Equation</div>
-        <div class="value" id="equation-display">P = 20 − 2Q</div>
+        <div class="label">Base (Quantity)</div>
+        <div class="value" id="base-display"></div>
       </div>
       <div class="data-block">
-        <div class="label">Revenue (P × Q)</div>
-        <div class="value" id="revenue-display">Revenue: 50</div>
+        <div class="label">YIntercept - Price = Height</div>
+        <div class="value" id="height-display"></div>
       </div>
     </div>
 
@@ -473,16 +464,16 @@
         <div class="control-block">
           <div class="control-top">
             <label for="price-number">Price (P)</label>
-            <input type="number" id="price-number" min="0" max="20" step="0.2" value="10">
+            <input type="number" id="price-number" min="0" max="20" step="0.2" value="10" readonly>
           </div>
           <input type="range" id="price-range" min="0" max="20" step="0.2" value="10">
         </div>
         <div class="control-block">
           <div class="control-top">
-            <label for="qty-number">Quantity (Q)</label>
-            <input type="number" id="qty-number" min="0" max="10" step="0.1" value="5">
+            <label for="qty-number">Consumer Surplus (CS)</label>
+            <input type="number" id="cs-number" min="0" max="100" step="0.1" value="25" readonly>
           </div>
-          <input type="range" id="qty-range" min="0" max="10" step="0.1" value="5">
+          <input type="range" id="cs-range" min="0" max="100" step="0.1" value="25">
         </div>
       </div>
     </div>
@@ -503,7 +494,7 @@
         min="0"
         max="20"
         step="0.2"
-        value="10">
+        value="10" readonly>
 
     <span>Price →</span>
 
@@ -515,17 +506,17 @@
 
     <button class="step-btn" id="qty-minus" type="button">−</button>
 
-    <span>← Qty</span>
+    <span>← CS</span>
 
     <input
         type="number"
         id="qty-number-m"
         min="0"
-        max="10"
+        max="100"
         step="0.1"
-        value="5">
+        value="25" readonly>
 
-    <span>Qty →</span>
+    <span>CS →</span>
 
     <button class="step-btn" id="qty-plus" type="button">+</button>
 
@@ -561,21 +552,26 @@
 </div>
 
     <div class="card docs">
-      <h1>Understanding the Law of Demand</h1>
-      <p>
-        This lesson explores the <strong>Law of Demand</strong>: as the price of a good
-        falls, the quantity demanded rises, and vice versa. The graph shows a linear
-        inverse demand curve, <strong>P = 20 − 2Q</strong>, where Price sits on the
-        vertical axis and Quantity on the horizontal axis.
-      </p>
-      <br/>
-      <h2>How to Use the Playground</h2>
-      <ul>
-        <li>Drag the dot along the curve to change Price and Quantity together.</li>
-        <li>Use the number field, slider, or +/− buttons (on mobile) — Price and Quantity always stay linked by the equation.</li>
-        <li>Watch the Revenue block update live as Revenue = Price × Quantity.</li>
-        <li>Try to find the combination that makes Revenue as large as possible.</li>
-      </ul>
+     
+<h1>Understanding Consumer Surplus</h1>
+<p>
+  This lesson explores <strong>Consumer Surplus</strong>: the difference between 
+  the maximum price a consumer is willing to pay and the price they actually pay. 
+  The graph shows a linear demand curve, <strong>P = 20 − 2Q</strong>, where Price 
+  sits on the vertical axis and Quantity on the horizontal axis.
+</p>
+<br/>
+
+<h2>How to Use the Playground</h2>
+<ul>
+  <li>Use the slider or +/− buttons (on mobile) to change the <strong>Price</strong>.</li>
+  <li>Watch the <strong>Consumer Surplus</strong> area change as the price changes.</li>
+  <li>The <strong>Base</strong> and <strong>Height</strong> values are shown for 
+    reference and update automatically.</li>
+  <li>Use the displayed Base and Height values to see how they determine the size of the 
+    consumer surplus.</li>
+
+
     </div>
 
   </div>

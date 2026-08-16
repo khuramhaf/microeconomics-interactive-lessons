@@ -137,6 +137,8 @@ bindStepper(qtyPlus, 1, "qty");
 
 
 function renderAll() {
+
+  qStatusEl.textContent = "";
   if (typeof stopGhostAnimation === "function") stopGhostAnimation();
   
   const pStr = state.P.toFixed(1);
