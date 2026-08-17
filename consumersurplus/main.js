@@ -137,7 +137,7 @@ function updateUnitDividers() {
   const maxUnit = Math.floor(state.Q);
   const units = d3.range(1, maxUnit + 1);
 
-  // 1. Divider lines
+  // 1. Divider lines — only at whole units
   const lines = unitDividers.selectAll("line.unit-divider").data(units);
 
   lines.enter()
@@ -154,24 +154,29 @@ function updateUnitDividers() {
 
   lines.exit().remove();
 
-  // 2. Surplus labels
-  const labels = unitDividers.selectAll("text.unit-surplus").data(units);
+  // 2. Surplus labels — blocks include a trailing partial block if Q isn't a whole number
+  const blocks = units.map(d => ({ left: d - 1, right: d }));
+  const hasPartial = state.Q > maxUnit + 1e-9;
+  if (hasPartial) blocks.push({ left: maxUnit, right: state.Q });
+
+  const labels = unitDividers.selectAll("text.unit-surplus").data(blocks);
 
   labels.enter()
     .append("text")
     .attr("class", "unit-surplus")
-    .attr("text-anchor", "middle")
+    .attr("text-anchor", "start")
     .attr("font-size", "16px")
     .attr("font-weight", "bold")
     .attr("fill", "#aeea00")
     .attr("pointer-events", "none")
     .merge(labels)
-    .attr("x", d => xScale(d - 0.5))
+    .attr("x", d => xScale(d.left) + 2)
     .attr("y", yScale(state.P) - 6)
     .text(d => {
-      const pLeft = clamp(priceFromQty(d - 1), P_MIN, P_MAX);
-      const pRight = clamp(priceFromQty(d), P_MIN, P_MAX);
-      const area = ((pLeft - state.P) + (pRight - state.P)) / 2;
+      const pLeft = clamp(priceFromQty(d.left), P_MIN, P_MAX);
+      const pRight = clamp(priceFromQty(d.right), P_MIN, P_MAX);
+      const width = d.right - d.left;
+      const area = ((pLeft - state.P) + (pRight - state.P)) / 2 * width;
       return area > 0.05 ? area.toFixed(1) : "";
     });
 
