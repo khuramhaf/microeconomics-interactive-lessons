@@ -1,12 +1,4 @@
-/* ==========================================================
-   graph.js
-   D3 scales, axes, the demand curve, the shaded consumer-surplus
-   region, and the draggable price line.
-   REQUIRES: model.js (state, Q_MIN/MAX, P_MIN/MAX, priceFromQty,
-             clamp, setFromP)
-   Must load AFTER <svg id="graph-svg"> exists in the DOM (i.e. at the
-   bottom of <body>, not in <head>).
-   ========================================================== */
+
 
 const svgEl = d3.select("#graph-svg");
 const viewW = 560, viewH = 420;
