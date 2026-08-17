@@ -52,13 +52,31 @@ const lineData = buildDemandLineData(priceFromQty);
 
 // Area generator for the shaded CS triangle: top edge follows the demand
 // curve (y1), bottom edge sits flat at the current price line (y0).
+
+
+
 const csAreaGen = d3.area()
   .x(d => xScale(d.q))
   .y0(() => yScale(state.P))
   .y1(d => yScale(d.p));
 
+
+  const csArea = g.append("path")
+  .attr("fill", "#4CAF50");
+
+// group for the per-unit divider lines, appended once
+const unitDividers = g.append("g");
+
+g.append("path")
+  .datum(lineData)
+  .attr("class", "demand-line")
+  .attr("d", lineGen);
+
+
 // Appended before the demand line so the curve's stroke renders crisply
 // on top of the shaded fill rather than under it.
+
+/* 
 const csArea = g.append("path")
 
 .attr("fill", "#4CAF50");
@@ -67,6 +85,8 @@ g.append("path")
   .datum(lineData)
   .attr("class", "demand-line")
   .attr("d", lineGen);
+
+  */
 
 /* ---------- the draggable price line ---------- */
 
@@ -78,28 +98,30 @@ const hitHeight = isMobile ? 36 : 24;
 
 // Wide, invisible hit-region centered directly over the price line
 
-const priceLineHit = g.append("rect")
+// 1. Create a dedicated container group
+const priceGroup = g.append("g").attr("class", "price-line-group");
+
+// 2. Append elements to priceGroup instead of g
+const priceLineHit = priceGroup.append("rect")
   .attr("x", 0)
   .attr("width", innerW)
   .attr("height", hitHeight)
   .attr("fill", "transparent")
   .attr("pointer-events", "all");
 
-
-const priceLine = g.append("line")
+const priceLine = priceGroup.append("line")
   .attr("x1", 0)
   .attr("x2", innerW)
   .style("stroke-width", "5px")
   .attr("stroke", "#ff9800")
   .style("pointer-events", "none");
 
-
-
-// Handle where the price line meets the demand curve — the visual
-// drag anchor, echoing the draggable dot from the movement/shift lesson.
-const priceHandle = g.append("circle")
+const priceHandle = priceGroup.append("circle")
   .attr("class", "drag-dot")
   .attr("r", isMobile ? 18 : 12);
+
+// 3. Bring the entire group to the front of container 'g'
+
 
 // Dashed drop-line down to the Q axis, same "proj-line" convention as
 // the movement/shift lesson's projection lines.

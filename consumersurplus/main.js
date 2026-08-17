@@ -129,6 +129,60 @@ csRange.addEventListener("input", e => handleInputInteraction(setFromCS, parseFl
 
 /* ---------- master render: syncs every DOM element to `state` ---------- */
 
+
+
+
+
+function updateUnitDividers() {
+  const maxUnit = Math.floor(state.Q);
+  const units = d3.range(1, maxUnit + 1);
+
+  // 1. Divider lines
+  const lines = unitDividers.selectAll("line.unit-divider").data(units);
+
+  lines.enter()
+    .append("line")
+    .attr("class", "unit-divider")
+    .attr("stroke", "#2e7d32")
+    .attr("stroke-width", 3)
+    .attr("pointer-events", "none")
+    .merge(lines)
+    .attr("x1", d => xScale(d))
+    .attr("x2", d => xScale(d))
+    .attr("y1", d => yScale(clamp(priceFromQty(d), P_MIN, P_MAX)))
+    .attr("y2", yScale(state.P));
+
+  lines.exit().remove();
+
+  // 2. Surplus labels
+  const labels = unitDividers.selectAll("text.unit-surplus").data(units);
+
+  labels.enter()
+    .append("text")
+    .attr("class", "unit-surplus")
+    .attr("text-anchor", "middle")
+    .attr("font-size", "16px")
+    .attr("font-weight", "bold")
+    .attr("fill", "#aeea00")
+    .attr("pointer-events", "none")
+    .merge(labels)
+    .attr("x", d => xScale(d - 0.5))
+    .attr("y", yScale(state.P) - 6)
+    .text(d => {
+      const pLeft = clamp(priceFromQty(d - 1), P_MIN, P_MAX);
+      const pRight = clamp(priceFromQty(d), P_MIN, P_MAX);
+      const area = ((pLeft - state.P) + (pRight - state.P)) / 2;
+      return area > 0.05 ? area.toFixed(1) : "";
+    });
+
+  labels.exit().remove();
+
+  // 3. Layering control
+  unitDividers.selectAll("text.unit-surplus").raise(); // Move text above lines within the group
+  unitDividers.raise();   
+  priceGroup.raise();                             // Move entire container above other SVG elements
+}
+
 function renderAll() {
 
   qStatusEl.textContent = "";
@@ -150,6 +204,8 @@ function renderAll() {
   // [0, state.Q] so it always matches the current price line exactly.
   const csData = lineData.filter(d => d.q <= state.Q);
   csArea.datum(csData).attr("d", csAreaGen);
+
+updateUnitDividers();
 
   const cx = xScale(state.Q);
   const cy = yScale(state.P);
