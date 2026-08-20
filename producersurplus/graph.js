@@ -1,5 +1,4 @@
 
-
 const svgEl = d3.select("#graph-svg");
 const viewW = 560, viewH = 420;
 const margin = { top: 16, right: 20, bottom: 40, left: 48 };
@@ -26,13 +25,13 @@ g.append("text").attr("class", "axis-label")
   .attr("transform", "rotate(-90)").attr("x", -innerH / 2).attr("y", -32)
   .attr("text-anchor", "middle").text("Price (P)");
 
-/* ---------- demand curve ----------
+/* ---------- supply curve ----------
    Split into a data-builder + a line-generator, same pattern as the
-   movement/shift lesson: the same lineData array feeds both the curve
-   stroke and the CS-region area generator below, so the shaded area
+   consumer-surplus lesson: the same lineData array feeds both the curve
+   stroke and the PS-region area generator below, so the shaded area
    always tracks the actual curve with no separate math to keep in sync. */
 
-function buildDemandLineData(priceFn) {
+function buildSupplyLineData(priceFn) {
   return d3.range(Q_MIN, Q_MAX + 0.01, 0.05).map(q => ({
     q,
     p: clamp(priceFn(q), P_MIN, P_MAX)
@@ -40,21 +39,21 @@ function buildDemandLineData(priceFn) {
 }
 
 const lineGen = d3.line().x(d => xScale(d.q)).y(d => yScale(d.p));
-const lineData = buildDemandLineData(priceFromQty);
+const lineData = buildSupplyLineData(priceFromQty);
 
-// Area generator for the shaded CS triangle: top edge follows the demand
-// curve (y1), bottom edge sits flat at the current price line (y0).
-
-
-
-const csAreaGen = d3.area()
+// Area generator for the shaded PS triangle: bottom edge follows the
+// supply curve (y1), top edge sits flat at the current price line (y0).
+// The supply curve is below the price line for every q < Q, so the
+// fill sits under the price line and above the rising supply curve —
+// same "one boundary is the state.P line, one boundary is the curve"
+// shape as the CS lesson's shaded region, just mirrored top-to-bottom.
+const psAreaGen = d3.area()
   .x(d => xScale(d.q))
   .y0(() => yScale(state.P))
   .y1(d => yScale(d.p));
 
-
-  const csArea = g.append("path")
-  .attr("fill", "#4CAF50");
+const psArea = g.append("path")
+  .attr("fill", "#2196F3");
 
 // group for the per-unit divider lines, appended once
 const unitDividers = g.append("g");
@@ -62,31 +61,19 @@ const unitDividers = g.append("g");
 g.append("path")
   .datum(lineData)
   .attr("class", "demand-line")
+  .attr("fill", "none")
+  .attr("stroke","red")
+  .attr("stroke-width", 4)
   .attr("d", lineGen);
 
-
-// Appended before the demand line so the curve's stroke renders crisply
+// Appended before the supply line so the curve's stroke renders crisply
 // on top of the shaded fill rather than under it.
 
-/* 
-const csArea = g.append("path")
-
-.attr("fill", "#4CAF50");
-
-g.append("path")
-  .datum(lineData)
-  .attr("class", "demand-line")
-  .attr("d", lineGen);
-
-  */
-
 /* ---------- the draggable price line ---------- */
-
 
 const isMobile = window.innerWidth <= 900;
 
 const hitHeight = isMobile ? 36 : 24;
- 
 
 // Wide, invisible hit-region centered directly over the price line
 
@@ -114,9 +101,8 @@ const priceHandle = priceGroup.append("circle")
 
 // 3. Bring the entire group to the front of container 'g'
 
-
 // Dashed drop-line down to the Q axis, same "proj-line" convention as
-// the movement/shift lesson's projection lines.
+// the consumer-surplus lesson's projection lines.
 const qtyLine = g.append("line").attr("class", "proj-line");
 
 let isDragging = false;
@@ -144,6 +130,11 @@ const drag = d3.drag()
     isDragging = false;
     priceLineHit.attr("cursor", "ns-resize");
     priceHandle.attr("cursor", "grab");
+
+     const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
   });
 
 priceLineHit.call(drag);
