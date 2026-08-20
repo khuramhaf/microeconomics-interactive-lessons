@@ -72,6 +72,11 @@ qCheckBtn.addEventListener("click", () => {
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
   if (!quizQuestions || !quizQuestions.length) return;
+
+
+  if (qGraphLockBtn.parentNode === qActionRow) {
+    qActionRow.removeChild(qGraphLockBtn);
+  }
   
   // Clear any leftover data from the previous question
   qCheckBtn.dataset.selectedAnswer = "none";
