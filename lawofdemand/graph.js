@@ -81,6 +81,11 @@ const drag = d3.drag()
   .on("end", function () {
     isDragging = false;
     d3.select(this).attr("cursor", "grab");
+
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
   });
 
 dot.call(drag);

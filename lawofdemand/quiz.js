@@ -85,7 +85,71 @@ const quizQuestions = [
   },
   {
     "id": 7,
-    "title": "Question 7: Revenue Challenge",
+    "title": "Question 7: Set the Price",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 8,
+    "title": "Question 8: Set the Price",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 16},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+     {
+    "id": 9,
+    "title": "Question 9: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 7. Move the graph until Quantity = 5. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 6},
+    "validationState": { "price": 10 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 10,
+    "title": "Question 10: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 3. Move the graph until Quantity = 5. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 14},
+    "validationState": { "price": 10 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+  {
+    "id": 11,
+    "title": "Question 11: Revenue Challenge",
     "prompt": "Can you find a point where Total Revenue = $32?",
     "validationState": { "totalRevenue": 32 },
     "render": renderQuiz,
@@ -93,8 +157,8 @@ const quizQuestions = [
     "startAnimation": animateGhostBoth
   },
   {
-    "id": 8,
-    "title": "Question 8: Find the Point",
+    "id": 12,
+    "title": "Question 12: Find the Point",
     "prompt": "Find the point on Graph where Price = $10, Quantity = 5, and Total Revenue = $50.",
     "validationState": { "price": 10, "quantity": 5 },
     "render": renderQuiz,
@@ -102,8 +166,8 @@ const quizQuestions = [
     "startAnimation": animateGhostBoth
   },
   {
-    "id": 9,
-    "title": "Question 9: Find the Revenue",
+    "id": 13,
+    "title": "Question 13: Find the Revenue",
     "prompt": "Set Quantity = 7. What is the Revenue?",
     "options": ["$50", "$30", "$42", "$10"],
     "correctAnswer": "$42",
@@ -113,8 +177,8 @@ const quizQuestions = [
     "startAnimation": animateGhostQuantity
   },
   {
-    "id": 10,
-    "title": "Question 10: Maximum Revenue",
+    "id": 14,
+    "title": "Question 14: Maximum Revenue",
     "prompt": "Move the graph until Total Revenue is as high as possible.",
     "validationState": { "totalRevenue": 50 },
     "render": renderQuiz,
@@ -122,8 +186,8 @@ const quizQuestions = [
     "startAnimation": animateGhostBoth
   },
   {
-    "id": 11,
-    "title": "Question 11: Prediction",
+    "id": 15,
+    "title": "Question 15: Prediction",
     "prompt": "If price increases, what happens to quantity demanded?",
     "options": ["Quantity increases", "Quantity decreases", "Quantity stays the same"],
     "correctAnswer": "Quantity decreases",
@@ -132,8 +196,8 @@ const quizQuestions = [
     "startAnimation": noHint
   },
   {
-    "id": 12,
-    "title": "Question 12: Prediction",
+    "id": 16,
+    "title": "Question 16: Prediction",
     "prompt": "If price decreases, what happens to quantity demanded?",
     "options": ["Quantity increases", "Quantity decreases", "Quantity stays the same"],
     "correctAnswer": "Quantity increases",
@@ -142,8 +206,8 @@ const quizQuestions = [
     "startAnimation": noHint
   },
   {
-    "id": 13,
-    "title": "Question 13: Use the Equation",
+    "id": 17,
+    "title": "Question 17: Use the Equation",
     "prompt": "Using the equation P = 20 − 2Q If Price (P) = 4, what is the value of Quantity (Q)?",
     "options": ["Q = 4", "Q = 6", "Q = 8", "Q = 12"],
     "correctAnswer": "Q = 8",
@@ -152,8 +216,8 @@ const quizQuestions = [
     "startAnimation": noHint
   },
   {
-    "id": 14,
-    "title": "Question 14: Use the Equation",
+    "id": 18,
+    "title": "Question 18: Use the Equation",
     "prompt": "Using the equation P = 20 − 2Q If Quantity (Q) = 6, what is the value of Price (P)?",
     "options": ["P = $6", "P = $8", "P = $10", "P = $12"],
     "correctAnswer": "P = $8",
@@ -162,8 +226,8 @@ const quizQuestions = [
     "startAnimation": noHint
   },
   {
-    "id": 15,
-    "title": "Question 15: Direct Demand Equation",
+    "id": 19,
+    "title": "Question 19: Direct Demand Equation",
     "prompt": "The inverse demand equation is P = 20 − 2Q Which of the following is the Direct Demand Equation?",
     "options": ["Q = 20 − 2P", "Q = 10 − 0.5P", "Q = 20 + 2P", "Q = 2P − 20"],
     "correctAnswer": "Q = 10 − 0.5P",
@@ -172,8 +236,8 @@ const quizQuestions = [
     "startAnimation": noHint
   },
   {
-    "id": 16,
-    "title": "Question 16: Inverse Demand Equation",
+    "id": 20,
+    "title": "Question 20: Inverse Demand Equation",
     "prompt": "The direct demand equation is Q = 10 − 0.5P Which of the following is the Inverse Demand Equation?",
     "options": ["P = 20 − 2Q", "P = 10 − 0.5Q", "P = 2Q − 20", "P = 20 + 2Q"],
     "correctAnswer": "P = 20 − 2Q",
@@ -182,6 +246,84 @@ const quizQuestions = [
     "startAnimation": noHint
   }
 ];
+
+
+
+
+
+
+function setState(newPrice) {
+
+  // Update model state
+  state.P = newPrice;
+  setFromP(newPrice);
+
+
+}
+
+function lockStateIncrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P < this.questionState.price || state.P > this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function lockStateDecrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P > this.questionState.price || state.P < this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function graphStateLockFun(){
+
+  
+
+  if (graphStateLock===false){
+
+        setState(quizQuestions[qIndex].questionState.price)
+
+
+   
+  }
+
+  else{
+
+  }
+
+}
 
 
 function noHint()

@@ -92,6 +92,71 @@ const quizQuestions = [
 },
 
 {
+    "id": 7,
+    "title": "Question 7: Set the Price",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 8,
+    "title": "Question 8: Set the Price",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 16},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+     {
+    "id": 9,
+    "title": "Question 9: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 4. Move the graph until Quantity = 6. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 10,
+    "title": "Question 10: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 5. Move the graph until Quantity = 3. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 10},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+{
   "id": 7,
   "title": "Question 7: Revenue Challenge",
   "prompt": "Can you find a point where Total Revenue = $98?",
@@ -236,6 +301,79 @@ const quizQuestions = [
 }
 
 ];
+
+function setState(newPrice) {
+
+  // Update model state
+  state.P = newPrice;
+  setFromP(newPrice);
+
+
+}
+
+function lockStateIncrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P < this.questionState.price || state.P > this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function lockStateDecrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P > this.questionState.price || state.P < this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function graphStateLockFun(){
+
+  
+
+  if (graphStateLock===false){
+
+        setState(quizQuestions[qIndex].questionState.price)
+
+
+   
+  }
+
+  else{
+
+  }
+
+}
 
 function noHint()
 {
