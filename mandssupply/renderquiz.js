@@ -123,7 +123,7 @@ const quizQuestions = [
  {
     "id": 8,
     "title": "Question 8: Set the Intercept",
-    "prompt": "The graph is currently set at Intercept = 0. Move the graph until Intercept = 4 on price axis. What happens to Quantity Demanded?",
+    "prompt": "The graph is currently set at Intercept = 0. Move the graph until Intercept = 4 on price axis. What happens to Quantity Supplied?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It decreases",
     "questionState": {"intercept": 0},
@@ -140,7 +140,7 @@ const quizQuestions = [
   {
     "id": 9,
     "title": "Question 9: Set the Intercept",
-    "prompt": "The graph is currently set at Intercept = 0. Move the graph until Intercept = 2 on quantity axis. What happens to Quantity Demanded?",
+    "prompt": "The graph is currently set at Intercept = 0. Move the graph until Intercept = 2 on quantity axis. What happens to Quantity Supplied?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
     "questionState": {"intercept": 0},
