@@ -78,7 +78,15 @@ const dragLine = d3.drag()
         }
 
         renderAll();
-    });
+    })
+     .on("end", function () {
+    
+
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
+  });
 
 supplyLineHitbox.call(dragLine); 
 
