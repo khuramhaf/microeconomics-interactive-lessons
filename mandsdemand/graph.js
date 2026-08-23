@@ -93,7 +93,15 @@ intercept = roundStep(intercept, 0.2);
        
 
         renderAll();
-    });
+    })
+    .on("end", function () {
+    
+
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
+  });
 
         demandLineHitbox.call(dragLine);
 

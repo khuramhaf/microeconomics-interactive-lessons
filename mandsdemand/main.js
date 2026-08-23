@@ -44,6 +44,14 @@ inputInterceptNum.on("input", function() { handleInterceptChange(this.value); })
         
         inputInterceptNumM.on("input", function() { handleInterceptChange(this.value); });
 
+function triggerLockState() {
+  const currentQuestion = quizQuestions[qIndex];
+  currentQuestion?.lockState?.();
+}
+
+        inputInterceptSlider.on("change", function() { triggerLockState(); });
+
+
 
 /* ---------- long-press stepper buttons (mobile +/-) ---------- */
 
@@ -136,6 +144,9 @@ function bindStepper(btn, dir, type) {
   btn.on("pointerup", e => {
     if (e.pointerId !== activePointerId) return;
     if (!cancelled && !longPress) step();
+
+    const currentQuestion = quizQuestions[qIndex];
+  currentQuestion?.lockState?.();
     finish();
   });
 
@@ -255,5 +266,10 @@ function doRender({ intercept, P }) {
 
 /* ---------- kick things off ---------- */
 
-quizQuestions[qIndex].render();
+const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.price);
+
+    currentQuestion.render();
 renderAll();

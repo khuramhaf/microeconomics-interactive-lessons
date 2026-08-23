@@ -83,9 +83,186 @@ const quizQuestions = [
   render: renderQuiz,
   evaluate: evaluateDoubleGraphandOptions,
   startAnimation: () => animatePriceandIntercept(6, 16, 2000)
-}
+},
+
+
+
+
+
+ {
+    "id": 6,
+    "title": "Question 6: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 16. Move the graph until Intercept = 18. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It remains the same",
+    "questionState": {"intercept": 16},
+    "validationState": { "intercept": 18 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+  {
+    "id": 7,
+    "title": "Question 7: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 24. Move the graph until Intercept = 22. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It remains the same",
+    "questionState": {"intercept": 24},
+    "validationState": { "intercept": 22 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+
+ {
+    "id": 8,
+    "title": "Question 8: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 20. Move the graph until Intercept = 24. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"intercept": 20},
+    "validationState": { "intercept": 24 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+  {
+    "id": 9,
+    "title": "Question 9: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 22. Move the graph until Intercept = 18. What happens to Quantity Demanded?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"intercept": 22},
+    "validationState": { "intercept": 18 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+   {
+    "id": 10,
+    "title": "Question 10: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 24. Move the graph until Intercept = 20. What does this change represent?",
+    "options": ["Movement along the Demand Curve", "Shift in Demand Curve", "None of above"],
+    "correctAnswer": "Shift in Demand Curve",
+    "questionState": {"intercept": 24},
+    "validationState": { "intercept": 20 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+
   
 ];
+
+//is this movement along or shift
+
+
+
+function setState(newIntercept) {
+
+handleInterceptChange(newIntercept)
+
+}
+
+function lockStateIncrease(){
+
+  if(graphStateLock===true){
+
+  if (state.intercept < this.questionState.intercept || state.intercept > this.validationState.intercept){
+
+    
+
+setState(this.questionState.intercept)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function lockStateDecrease(){
+
+  if(graphStateLock===true){
+
+if (state.intercept > this.questionState.intercept || state.intercept < this.validationState.intercept){
+    
+
+setState(this.questionState.intercept)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function graphStateLockFun(){
+
+  
+
+  if (graphStateLock===false){
+
+        setState(quizQuestions[qIndex].questionState.intercept)
+
+
+   
+  }
+
+  else{
+
+  }
+
+}
+
+
+function noHint()
+{
+
+  qStatusEl.textContent = "No Animated Hint is available";
+}
+
+
+
+
+
+
 
 
 
@@ -119,6 +296,27 @@ const qCheckBtn = document.createElement("button");
 qCheckBtn.id = "q-check";
 qCheckBtn.className = "primary";
 qCheckBtn.textContent = "Check Answer";
+
+
+
+var graphStateLock=true;
+
+const qGraphLockBtn = document.createElement("button");
+qGraphLockBtn.id = "q-graph-lock";
+qGraphLockBtn.className = "primary";
+qGraphLockBtn.style.backgroundColor = 'green'
+qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+
+qGraphLockBtn.addEventListener("click", () => {
+
+  if (typeof window.graphStateLockFun === "function") {
+    window.graphStateLockFun();
+  }
+  graphStateLock = !graphStateLock;
+  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+
+  
+});
 
 
 
@@ -156,6 +354,55 @@ qCheckBtn.addEventListener("click", () => {
 
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
+  if (!quizQuestions || !quizQuestions.length) return;
+
+
+   if (qGraphLockBtn.parentNode === qActionRow) {
+    qActionRow.removeChild(qGraphLockBtn);
+  }
+  
+  // Clear any leftover data from the previous question
+  qCheckBtn.dataset.selectedAnswer = "none";
+  qTextEl.textContent = this.prompt;
+  qIndexEl.textContent = `Task ${qIndex + 1} of ${quizQuestions.length}`;
+  qPrevBtn.disabled = qIndex === 0;
+  qNextBtn.disabled = qIndex === quizQuestions.length - 1;
+
+  // Clear previous options
+  qOptionsEl.innerHTML = "";
+  
+  // Reset UI elements to an empty/neutral state for the new question
+  qStatusEl.textContent = "";
+  qStatusEl.className = "quiz-status";
+  
+  const options =
+    typeof this.options === "function"
+        ? this.options()
+        : this.options;
+
+  if (options) {
+    options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "opt-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", (event) => {
+  [...qOptionsEl.children].forEach(b => b.style.backgroundColor = "white");
+  btn.style.backgroundColor = "lightgray";
+  qCheckBtn.dataset.selectedAnswer = event.target.textContent;// fix: selectedAnswer, not correctAnswer
+
+
+});
+      qOptionsEl.appendChild(btn);
+    });
+  }
+}
+
+
+
+function renderQuizLock() {
+
+  qActionRow.appendChild(qGraphLockBtn);
+  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
   if (!quizQuestions || !quizQuestions.length) return;
   
   // Clear any leftover data from the previous question
@@ -198,7 +445,7 @@ function renderQuiz() {
 function generateQuantityOptions() {
     const correctQty = Number(getQuantity().toFixed(1));
     const options = new Set();
-    options.add(correctQty);
+    options.add(correctQty.toFixed(1));
 
     let attempts = 0;
     while (options.size < 4 && attempts < 100) {
@@ -212,7 +459,9 @@ function generateQuantityOptions() {
         const qty = Number((correctQty + offset).toFixed(1));
 
         if (qty >= 0) {
-            options.add(qty);
+            options.add(qty.toFixed(1));
+
+            
         }
         
         attempts++; 
@@ -230,8 +479,27 @@ function generateQuantityOptions() {
 
 /* ---------- nav buttons ---------- */
 qPrevBtn.addEventListener("click", () => {
-  if (qIndex > 0) { qIndex--; quizQuestions[qIndex].render(); }
+  if (qIndex > 0) {
+    qIndex--;
+
+    graphStateLock=true
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.intercept);
+
+    currentQuestion.render();
+  }
 });
 qNextBtn.addEventListener("click", () => {
-  if (qIndex < quizQuestions.length - 1) { qIndex++; quizQuestions[qIndex].render(); }
+  if (qIndex < quizQuestions.length - 1) {
+    qIndex++;
+    graphStateLock=true
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.intercept);
+
+    currentQuestion.render();
+  }
 });

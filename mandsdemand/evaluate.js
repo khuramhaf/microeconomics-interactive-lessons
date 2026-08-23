@@ -86,7 +86,7 @@ function evaluateGraphandOptions(chosenAnswer) {
         : quizQuestions[qIndex].correctAnswer;
 
   const conditions = {
-    isAnswerCorrect: parseFloat(chosenAnswer) === parseFloat(correctAnswer),
+    isAnswerCorrect: chosenAnswer === correctAnswer,
     isStateValid: checkStateValidation(this, state),
     // Future options can be added right here easily:
     // isOption3Valid: checkOption3(this), 
