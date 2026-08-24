@@ -94,7 +94,7 @@ const quizQuestions = [
 {
     "id": 7,
     "title": "Question 7: Set the Price",
-    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Supolied?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
     "questionState": {"price": 8},
@@ -110,7 +110,7 @@ const quizQuestions = [
      {
     "id": 8,
     "title": "Question 8: Set the Price",
-    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Demanded?",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Supplied?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It decreases",
     "questionState": {"price": 16},

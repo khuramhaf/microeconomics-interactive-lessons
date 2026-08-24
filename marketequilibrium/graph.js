@@ -90,7 +90,13 @@ const drag = d3.drag()
     const rawP = yScale.invert(event.y);
     setFromP(rawP);
   })
-  .on("end", function () { d3.select(this).attr("cursor", "ns-resize"); });
+  .on("end", function () { d3.select(this).attr("cursor", "ns-resize"); 
+
+     const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
+  });
 
 // The user can drag the entire horizontal line up and down
 
@@ -112,6 +118,10 @@ const dragDot = d3.drag()
     // Restore correct cursors on drop
     const isLine = d3.select(this).node().tagName === "line";
     d3.select(this).attr("cursor", isLine ? "ns-resize" : "grab"); 
+     const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
   });
 
 // Attach the same drag handler to all three interactive components

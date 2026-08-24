@@ -19,6 +19,28 @@ qCheckBtn.textContent = "Check Answer";
 
 
 
+var graphStateLock=true;
+
+const qGraphLockBtn = document.createElement("button");
+qGraphLockBtn.id = "q-graph-lock";
+qGraphLockBtn.className = "primary";
+qGraphLockBtn.style.backgroundColor = 'green'
+qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+
+qGraphLockBtn.addEventListener("click", () => {
+
+  if (typeof window.graphStateLockFun === "function") {
+    window.graphStateLockFun();
+  }
+  graphStateLock = !graphStateLock;
+  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+
+  
+});
+
+
+
+
 const qHintBtn = document.createElement("button");
 qHintBtn.id = "q-hint-animation";
 qHintBtn.className = "primary";
@@ -50,6 +72,55 @@ qCheckBtn.addEventListener("click", () => {
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
   if (!quizQuestions || !quizQuestions.length) return;
+
+  if (qGraphLockBtn.parentNode === qActionRow) {
+    qActionRow.removeChild(qGraphLockBtn);
+  }
+  
+  // Clear any leftover data from the previous question
+  qCheckBtn.dataset.selectedAnswer = "none";
+  
+  stopGhostAnimation();
+
+  qTextEl.textContent = this.prompt;
+  qIndexEl.textContent = `Task ${qIndex + 1} of ${quizQuestions.length}`;
+  qPrevBtn.disabled = qIndex === 0;
+  qNextBtn.disabled = qIndex === quizQuestions.length - 1;
+
+  // Clear previous options
+  qOptionsEl.innerHTML = "";
+  
+  // Reset UI elements to an empty/neutral state for the new question
+  qStatusEl.textContent = "";
+  qStatusEl.className = "quiz-status";
+  
+  
+
+  if (this.options) {
+    this.options.forEach(opt => {
+      const btn = document.createElement("button");
+      btn.className = "opt-btn";
+      btn.textContent = opt;
+      btn.addEventListener("click", (event) => {
+  [...qOptionsEl.children].forEach(b => b.style.backgroundColor = "white");
+  btn.style.backgroundColor = "lightgray";
+  qCheckBtn.dataset.selectedAnswer = event.target.textContent; // fix: selectedAnswer, not correctAnswer
+});
+      qOptionsEl.appendChild(btn);
+    });
+  }
+}
+
+
+
+
+function renderQuizLock() {
+
+  qActionRow.appendChild(qGraphLockBtn);
+  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  if (!quizQuestions || !quizQuestions.length) return;
+
+ 
   
   // Clear any leftover data from the previous question
   qCheckBtn.dataset.selectedAnswer = "none";
@@ -87,8 +158,27 @@ function renderQuiz() {
 
 /* ---------- nav buttons ---------- */
 qPrevBtn.addEventListener("click", () => {
-  if (qIndex > 0) { qIndex--; quizQuestions[qIndex].render(); }
+  if (qIndex > 0) {
+    qIndex--;
+
+    graphStateLock=true
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.price);
+
+    currentQuestion.render();
+  }
 });
 qNextBtn.addEventListener("click", () => {
-  if (qIndex < quizQuestions.length - 1) { qIndex++; quizQuestions[qIndex].render(); }
+  if (qIndex < quizQuestions.length - 1) {
+    qIndex++;
+    graphStateLock=true
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.price);
+
+    currentQuestion.render();
+  }
 });

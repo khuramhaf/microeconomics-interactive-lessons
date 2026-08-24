@@ -22,6 +22,9 @@
 const quizQuestions = [
 
 
+
+
+
   {
     "id": 1,
     "title": "Question 1: Set the Price",
@@ -109,8 +112,183 @@ const quizQuestions = [
     "evaluate": evaluateGraphandOptions,
     "startAnimation": () => showPriceHint(16)
   },
+
+
+   {
+    "id": 9,
+    "title": "Question 9: Set the Price",
+    "prompt": "The graph is currently at Price = $4. Move the graph to Equilibrium",
+    
+    "questionState": {"price": 4},
+    "validationState": { "price": 10 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraph,
+    "startAnimation": noHint,
+    
+  },
+
+
+    {
+    "id": 10,
+    "title": "Question 10: Set the Price",
+    "prompt": "The graph is currently at Price = $14. Move the graph to Equilibrium",
+    
+    "questionState": {"price": 14},
+    "validationState": { "price": 10 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraph,
+    "startAnimation": noHint,
+    
+  },
+{
+    "id": 11,
+    "title": "Question 11: Set the Price",
+    "prompt": "The graph is currently set at Price = $8. What market condition does this situation represent?",
+    "options": ["Market Surplus", "Market Shortage", "None of the above"],
+    "correctAnswer": "Market Shortage",
+    "questionState": {"price": 8},
+    "validationState": { "price": 8 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateOptions,
+    "startAnimation": noHint,
+    
+  },
+
+  {
+    "id": 12,
+    "title": "Question 12: Set the Price",
+    "prompt": "The graph is currently set at Price = $16. What market condition does this situation represent?",
+    "options": ["Market Surplus", "Market Shortage", "None of the above"],
+    "correctAnswer": "Market Surplus",
+    "questionState": {"price": 16},
+    "validationState": { "price": 16 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+
+    {
+    "id": 13,
+    "title": "Question 13: Set the Price",
+    "prompt": "The graph is currently set at Equilibrium. Move the graph until Price = $14.  What market condition does this situation represent?",
+    "options": ["Market Surplus", "Market Shortage", "None of the above"],
+    "correctAnswer": "Market Surplus",
+    "questionState": {"price": 10},
+    "validationState": { "price": 14 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+     {
+    "id": 14,
+    "title": "Question 14: Set the Price",
+    "prompt": "The graph is currently set at Equilibrium. Move the graph until Price = $6.  What market condition does this situation represent?",
+    "options": ["Market Surplus", "Market Shortage", "None of the above"],
+    "correctAnswer": "Market Shortage",
+    "questionState": {"price": 10},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
   
 ];
+
+
+function setState(newPrice) {
+
+  // Update model state
+  state.P = newPrice;
+  state.Qd
+  state.Qs
+
+  setFromP(newPrice)
+
+
+}
+
+function lockStateIncrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P < this.questionState.price || state.P > this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function lockStateDecrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P > this.questionState.price || state.P < this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function graphStateLockFun(){
+
+  
+
+  if (graphStateLock===false){
+
+        setState(quizQuestions[qIndex].questionState.price)
+
+
+   
+  }
+
+  else{
+
+  }
+
+}
 
 
 function noHint()
