@@ -106,11 +106,11 @@ const quizQuestions = [
      {
     "id": 8,
     "title": "Question 8: Set the Price",
-    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Consumer Surplus?",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $8. What happens to Consumer Surplus?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
     "questionState": {"price": 16},
-    "validationState": { "price": 12 },
+    "validationState": { "price": 8 },
     "render": renderQuizLock,
     "setState": setState,
     "lockState": lockStateDecrease,
