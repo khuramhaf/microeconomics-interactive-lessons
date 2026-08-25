@@ -28,6 +28,24 @@ const equationDisplay = document.getElementById("equation-display");
 const STEP = 0.2; // amount changed per +/- click
 
 
+
+
+priceRange.addEventListener("change", () => {
+  const currentQuestion = quizQuestions[qIndex];
+
+  // Validate boundaries and reset to minimum if out of bounds
+  currentQuestion.lockState?.();
+});
+
+
+qtyRange.addEventListener("change", () => {
+  const currentQuestion = quizQuestions[qIndex];
+
+  // Validate boundaries and reset to minimum if out of bounds
+  currentQuestion.lockState?.();
+});
+
+
 /* step binder */
 
 
@@ -107,6 +125,11 @@ function bindStepper(btn, dir, type) {
     e.preventDefault(); 
     
     if (!cancelled && !longPress) step();
+
+    const currentQuestion = quizQuestions[qIndex];
+
+  // Validate boundaries and reset to minimum if out of bounds
+  currentQuestion.lockState?.();
     finish();
   });
 
@@ -211,4 +234,9 @@ function renderDynamicLines() {
 calculateEquilibrium();
 initInputListeners();
 renderAll();
-quizQuestions[qIndex].render();
+const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.demandIntercept);
+
+    currentQuestion.render();

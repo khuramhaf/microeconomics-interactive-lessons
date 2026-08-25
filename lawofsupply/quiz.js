@@ -91,70 +91,7 @@ const quizQuestions = [
     "startAnimation": animateGhostQuantity
 },
 
-{
-    "id": 7,
-    "title": "Question 7: Set the Price",
-    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Supolied?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It increases",
-    "questionState": {"price": 8},
-    "validationState": { "price": 12 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateIncrease,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint,
-    
-  },
 
-     {
-    "id": 8,
-    "title": "Question 8: Set the Price",
-    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Supplied?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It decreases",
-    "questionState": {"price": 16},
-    "validationState": { "price": 12 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateDecrease,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint,
-    
-  },
-
-
-     {
-    "id": 9,
-    "title": "Question 9: Set the Producer Surplus",
-    "prompt": "The graph is currently set at Quantity = 4. Move the graph until Quantity = 6. What happens to Price?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It increases",
-    "questionState": {"price": 8},
-    "validationState": { "price": 12 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateIncrease,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint,
-    
-  },
-
-     {
-    "id": 10,
-    "title": "Question 10: Set the Producer Surplus",
-    "prompt": "The graph is currently set at Quantity = 5. Move the graph until Quantity = 3. What happens to Price?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It decreases",
-    "questionState": {"price": 10},
-    "validationState": { "price": 6 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateDecrease,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint,
-    
-  },
 
 {
   "id": 7,
@@ -205,9 +142,75 @@ const quizQuestions = [
     "startAnimation": animateGhostBoth
 },
 
+
 {
-  "id": 11,
-  "title": "Question 11: Prediction",
+    "id": 11,
+    "title": "Question 11: Set the Price",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Supolied?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 12,
+    "title": "Question 12: Set the Price",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Supplied?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 16},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+     {
+    "id": 13,
+    "title": "Question 13: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 4. Move the graph until Quantity = 6. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 14,
+    "title": "Question 14: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Quantity = 5. Move the graph until Quantity = 3. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 10},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+{
+  "id": 15,
+  "title": "Question 15: Prediction",
   "prompt": "If price increases, what happens to quantity supplied?",
   "options": [
     "Quantity increases",
@@ -221,8 +224,8 @@ const quizQuestions = [
 },
 
 {
-  "id": 11,
-  "title": "Question 11: Prediction",
+  "id": 16,
+  "title": "Question 16: Prediction",
   "prompt": "If price decreases, what happens to quantity supplied?",
   "options": [
     "Quantity increases",
@@ -236,8 +239,8 @@ const quizQuestions = [
 },
 
 {
-  "id": 13,
-  "title": "Question 13: Use the Equation",
+  "id": 17,
+  "title": "Question 17: Use the Equation",
   "prompt": "Using the equation P = 2Q, if Price (P) = $4, what is the value of Quantity (Q)?",
   "options": [
     "Q = 1",
@@ -252,8 +255,8 @@ const quizQuestions = [
 },
 
 {
-  "id": 14,
-  "title": "Question 14: Use the Equation",
+  "id": 18,
+  "title": "Question 18: Use the Equation",
   "prompt": "Using the equation P = 2Q, if Quantity (Q) = 6, what is the value of Price (P)?",
   "options": [
     "P = $8",
@@ -268,8 +271,8 @@ const quizQuestions = [
 },
 
 {
-  "id": 15,
-  "title": "Question 15: Direct Supply Equation",
+  "id": 19,
+  "title": "Question 19: Direct Supply Equation",
   "prompt": "The inverse supply equation is P = 2Q. Which of the following is the Direct Supply Equation?",
   "options": [
     "Q = 2P",
@@ -284,8 +287,8 @@ const quizQuestions = [
 },
 
 {
-  "id": 16,
-  "title": "Question 16: Inverse Supply Equation",
+  "id": 20,
+  "title": "Question 20: Inverse Supply Equation",
   "prompt": "The direct supply equation is Q = 0.5P. Which of the following is the Inverse Supply Equation?",
   "options": [
     "P = 2Q",

@@ -99,6 +99,8 @@ function bindStepper(btn, dir, type) {
   btn.addEventListener("pointerup", e => {
     if (e.pointerId !== activePointerId) return;
     if (!cancelled && !longPress) step();
+    const currentQuestion = quizQuestions[qIndex];
+    currentQuestion.lockState?.();
     finish();
   });
  
@@ -126,6 +128,22 @@ priceNumber.addEventListener("input", e => handleInputInteraction(setFromP, pars
 priceRange.addEventListener("input", e => handleInputInteraction(setFromP, parseFloat(e.target.value)));
 csNumber.addEventListener("input", e => handleInputInteraction(setFromCS, parseFloat(e.target.value)));
 csRange.addEventListener("input", e => handleInputInteraction(setFromCS, parseFloat(e.target.value)));
+
+
+priceRange.addEventListener("change", () => {
+  const currentQuestion = quizQuestions[qIndex];
+
+  // Validate boundaries and reset to minimum if out of bounds
+  currentQuestion.lockState?.();
+});
+
+
+csRange.addEventListener("change", () => {
+  const currentQuestion = quizQuestions[qIndex];
+
+  // Validate boundaries and reset to minimum if out of bounds
+  currentQuestion.lockState?.();
+});
 
 /* ---------- master render: syncs every DOM element to `state` ---------- */
 
@@ -233,6 +251,11 @@ updateUnitDividers();
 
 /* ---------- kick things off ---------- */
 
-quizQuestions[qIndex].render();
+const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.setState?.(currentQuestion.questionState.price);
+
+    currentQuestion.render();
 
 renderAll();

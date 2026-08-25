@@ -85,8 +85,149 @@ const quizQuestions = [
     "evaluate": evaluateGraphandOptions,
     "startAnimation": noHint
   },
+
+
+  {
+    "id": 7,
+    "title": "Question 7: Set the Price",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Consumer Surplus?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 8},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 8,
+    "title": "Question 8: Set the Price",
+    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Consumer Surplus?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 16},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+
+     {
+    "id": 9,
+    "title": "Question 9: Set the Consumer Surplus",
+    "prompt": "The graph is currently set at Consumer Surplus = $9. Move the graph until Consumer Surplus = $25. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It decreases",
+    "questionState": {"price": 14},
+    "validationState": { "price": 10 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateDecrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
+
+     {
+    "id": 10,
+    "title": "Question 10: Set the Consumer Surplus",
+    "prompt": "The graph is currently set at Consumer Surplus = $81. Move the graph until Consumer Surplus = $49. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 2},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint,
+    
+  },
   
 ];
+
+function setState(newPrice) {
+
+  // Update model state
+  state.P = newPrice;
+  state.Q = qtyFromPrice(newPrice);
+  state.CS = consumerSurplusFromPrice(newPrice);
+
+  renderAll();
+
+}
+
+function lockStateIncrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P < this.questionState.price || state.P > this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function lockStateDecrease(){
+
+  if(graphStateLock===true){
+
+  if (state.P > this.questionState.price || state.P < this.validationState.price){
+
+    
+
+setState(this.questionState.price)
+
+
+  }
+  }
+
+  else{
+
+
+  }
+
+
+}
+
+
+function graphStateLockFun(){
+
+  
+
+  if (graphStateLock===false){
+
+        setState(quizQuestions[qIndex].questionState.price)
+
+
+   
+  }
+
+  else{
+
+  }
+
+}
 
 
 function noHint()
@@ -94,7 +235,6 @@ function noHint()
 
   qStatusEl.textContent = "No Animated Hint is available";
 }
-
 /* ==========================================================
    validation.js
    Pure "is the target met" logic. No DOM references — could be

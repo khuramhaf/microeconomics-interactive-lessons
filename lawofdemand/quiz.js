@@ -83,9 +83,50 @@ const quizQuestions = [
     "evaluate": evaluateGraphandOptions,
     "startAnimation": animateGhostQuantity
   },
+  
   {
     "id": 7,
-    "title": "Question 7: Set the Price",
+    "title": "Question 7: Revenue Challenge",
+    "prompt": "Can you find a point where Total Revenue = $32?",
+    "validationState": { "totalRevenue": 32 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraph,
+    "startAnimation": animateGhostBoth
+  },
+  {
+    "id": 8,
+    "title": "Question 8: Find the Point",
+    "prompt": "Find the point on Graph where Price = $10, Quantity = 5, and Total Revenue = $50.",
+    "validationState": { "price": 10, "quantity": 5 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraph,
+    "startAnimation": animateGhostBoth
+  },
+  {
+    "id": 9,
+    "title": "Question 9: Find the Revenue",
+    "prompt": "Set Quantity = 7. What is the Revenue?",
+    "options": ["$50", "$30", "$42", "$10"],
+    "correctAnswer": "$42",
+    "validationState": { "quantity": 7 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": animateGhostQuantity
+  },
+  {
+    "id": 10,
+    "title": "Question 10: Maximum Revenue",
+    "prompt": "Move the graph until Total Revenue is as high as possible.",
+    "validationState": { "totalRevenue": 50 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraph,
+    "startAnimation": animateGhostBoth
+  },
+
+
+  {
+    "id": 11,
+    "title": "Question 11: Set the Price",
     "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Quantity Demanded?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It decreases",
@@ -100,8 +141,8 @@ const quizQuestions = [
   },
 
      {
-    "id": 8,
-    "title": "Question 8: Set the Price",
+    "id": 12,
+    "title": "Question 12: Set the Price",
     "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $12. What happens to Quantity Demanded?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
@@ -117,8 +158,8 @@ const quizQuestions = [
 
 
      {
-    "id": 9,
-    "title": "Question 9: Set the Producer Surplus",
+    "id": 13,
+    "title": "Question 12: Set the Producer Surplus",
     "prompt": "The graph is currently set at Quantity = 7. Move the graph until Quantity = 5. What happens to Price?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
@@ -133,8 +174,8 @@ const quizQuestions = [
   },
 
      {
-    "id": 10,
-    "title": "Question 10: Set the Producer Surplus",
+    "id": 14,
+    "title": "Question 14: Set the Producer Surplus",
     "prompt": "The graph is currently set at Quantity = 3. Move the graph until Quantity = 5. What happens to Price?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It decreases",
@@ -146,44 +187,6 @@ const quizQuestions = [
     "evaluate": evaluateGraphandOptions,
     "startAnimation": noHint,
     
-  },
-  {
-    "id": 11,
-    "title": "Question 11: Revenue Challenge",
-    "prompt": "Can you find a point where Total Revenue = $32?",
-    "validationState": { "totalRevenue": 32 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraph,
-    "startAnimation": animateGhostBoth
-  },
-  {
-    "id": 12,
-    "title": "Question 12: Find the Point",
-    "prompt": "Find the point on Graph where Price = $10, Quantity = 5, and Total Revenue = $50.",
-    "validationState": { "price": 10, "quantity": 5 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraph,
-    "startAnimation": animateGhostBoth
-  },
-  {
-    "id": 13,
-    "title": "Question 13: Find the Revenue",
-    "prompt": "Set Quantity = 7. What is the Revenue?",
-    "options": ["$50", "$30", "$42", "$10"],
-    "correctAnswer": "$42",
-    "validationState": { "quantity": 7 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": animateGhostQuantity
-  },
-  {
-    "id": 14,
-    "title": "Question 14: Maximum Revenue",
-    "prompt": "Move the graph until Total Revenue is as high as possible.",
-    "validationState": { "totalRevenue": 50 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraph,
-    "startAnimation": animateGhostBoth
   },
   {
     "id": 15,

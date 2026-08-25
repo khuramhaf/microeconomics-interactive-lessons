@@ -77,14 +77,31 @@ const dragDemand = d3.drag().on("drag", function (event) {
   const p = yScale.invert(event.y);
   setDemandFromPoint(q, p);
   renderAll();
-});
+})
+.on("end", function () {
+    
+
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
+  });
+
 
 const dragSupply = d3.drag().on("drag", function (event) {
   const q = xScale.invert(event.x);
   const p = yScale.invert(event.y);
   setSupplyFromPoint(q, p);
   renderAll();
-});
+})
+.on("end", function () {
+    
+
+    const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
+  });
 
 demandDragArea.call(dragDemand);
 supplyDragArea.call(dragSupply);

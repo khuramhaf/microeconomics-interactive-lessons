@@ -144,6 +144,10 @@ const drag = d3.drag()
     isDragging = false;
     priceLineHit.attr("cursor", "ns-resize");
     priceHandle.attr("cursor", "grab");
+     const currentQuestion = quizQuestions[qIndex];
+
+    // Safely run setState if it exists, passing the question's current price state
+    currentQuestion.lockState?.();
   });
 
 priceLineHit.call(drag);
