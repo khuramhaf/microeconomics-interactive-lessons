@@ -136,6 +136,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -152,6 +153,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -169,6 +171,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -185,9 +188,44 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
+
+
+   {
+    "id": 15,
+    "type":true,
+    "title": "Question 15: Set the Price",
+    "prompt": "The graph is currently set at Price = $12. Move the price in the direction that causes an increase in quantity demanded?",
+    "questionState": {"price": 12},
+    "validationState": { "price": 0 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '<'); },
+    "lockUnlockReset": resetGraph,
+    "startAnimation": noHint,
+    
+  },
+
+
+   {
+    "id": 15,
+    "type":true,
+    "title": "Question 15: Set the Price",
+    "prompt": "The graph is currently set at Price = $10. Move the price in the direction that causes a decrease in quantity demanded?",
+    "questionState": {"price": 10},
+    "validationState": { "price": 20 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '>'); },
+    "lockUnlockReset": resetGraph,
+    "startAnimation": noHint,
+    
+  },
+
+  
   {
     "id": 15,
     "title": "Question 15: Prediction",
@@ -310,7 +348,7 @@ setState(this.questionState.price)
 }
 
 
-function graphStateLockFun(){
+function graphStateLockUnlock(){
 
   
 
@@ -322,10 +360,23 @@ function graphStateLockFun(){
    
   }
 
+
+
   else{
+
 
   }
 
+}
+
+
+function resetGraph(){
+
+    if(quizQuestions[qIndex].type){
+
+    setState(quizQuestions[qIndex].questionState.price)
+
+  }
 }
 
 
@@ -392,6 +443,20 @@ function evaluateGraph(){
 
     qStatusEl.textContent = "Adjust the graph to match the target";
   }
+}
+
+
+function evaluateGraphPlain(operator) {
+  const currentPrice = state.P;
+  const targetPrice = this.questionState.price;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
 }
 
 
