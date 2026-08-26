@@ -63,6 +63,20 @@ function evaluateGraph(){
 }
 
 
+function evaluateGraphPlain(operator) {
+  const currentPrice = state.intercept;
+  const targetPrice = this.questionState.intercept;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
+}
+
+
 function evaluateOptions(chosenAnswer) {
 
  

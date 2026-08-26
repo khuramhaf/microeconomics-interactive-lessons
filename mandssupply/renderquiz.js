@@ -98,6 +98,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -114,6 +115,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -132,6 +134,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -149,6 +152,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -166,6 +170,39 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
+    "startAnimation": noHint,
+    
+  },
+
+
+   {
+    "id": 10,
+    "type":true,
+    "title": "Question 10: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 0. Move the intercept in the direction that increases quantity supplied while keeping price unchanged.",
+    "questionState": {"intercept": 0},
+    "validationState": { "intercept": -6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '<'); },
+    "lockUnlockReset": resetGraph,
+    "startAnimation": noHint,
+    
+  },
+
+
+    {
+    "id": 10,
+    "type":true,
+    "title": "Question 10: Set the Intercept",
+    "prompt": "The graph is currently set at Intercept = 0. Move the intercept in the direction that decreases quantity supplied while keeping price unchanged.",
+    "questionState": {"intercept": 0},
+    "validationState": { "intercept": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '>'); },
+    "lockUnlockReset": resetGraph,
     "startAnimation": noHint,
     
   },
@@ -230,7 +267,7 @@ setState(this.questionState.intercept)
 }
 
 
-function graphStateLockFun(){
+function graphStateLockUnlock(){
 
   
 
@@ -242,11 +279,25 @@ function graphStateLockFun(){
    
   }
 
+
+
   else{
+
 
   }
 
 }
+
+
+function resetGraph(){
+
+    if(quizQuestions[qIndex].type){
+
+    setState(quizQuestions[qIndex].questionState.intercept)
+
+  }
+}
+
 
 
 function noHint()
@@ -301,11 +352,22 @@ qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
 
 qGraphLockBtn.addEventListener("click", () => {
 
-  if (typeof window.graphStateLockFun === "function") {
-    window.graphStateLockFun();
+  if (typeof quizQuestions[qIndex].lockUnlockReset === "function") {
+    quizQuestions[qIndex].lockUnlockReset();
   }
+
   graphStateLock = !graphStateLock;
-  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  const currentQuestion = quizQuestions[qIndex];
+
+  if (currentQuestion && currentQuestion.type) {
+    // Mode A: Question has a type -> Always show "Reset Graph"
+    qGraphLockBtn.textContent = "Reset Graph";
+  } else {
+    // Mode B: Standard question -> Toggle between "Unlock Graph" & "Lock Graph"
+    qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  }
+
+
 
   
 });
@@ -394,6 +456,10 @@ function renderQuizLock() {
 
   qActionRow.appendChild(qGraphLockBtn);
   qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+     if(quizQuestions[qIndex].type){
+ qGraphLockBtn.textContent="Reset Graph"
+
+  }
   if (!quizQuestions || !quizQuestions.length) return;
   
   // Clear any leftover data from the previous question
