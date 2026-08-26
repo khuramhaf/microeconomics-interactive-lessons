@@ -161,7 +161,7 @@ const quizQuestions = [
 
      {
     "id": 13,
-    "title": "Question 12: Set the Producer Surplus",
+    "title": "Question 12: Set the Quantity",
     "prompt": "The graph is currently set at Quantity = 7. Move the graph until Quantity = 5. What happens to Price?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
@@ -178,7 +178,7 @@ const quizQuestions = [
 
      {
     "id": 14,
-    "title": "Question 14: Set the Producer Surplus",
+    "title": "Question 14: Set the Quantity",
     "prompt": "The graph is currently set at Quantity = 3. Move the graph until Quantity = 5. What happens to Price?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It decreases",
