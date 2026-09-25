@@ -148,6 +148,8 @@ bindStepper(qtyPlus, 1, "qty");
 
 /* ---------- orchestrator ---------- */
 function renderAll() {
+
+  stopGhostAnimation();
   qStatusEl.textContent = "";
   renderGraph();   // graph.js — draws from current state
   syncInputs();     // below — mirrors state into the DOM controls

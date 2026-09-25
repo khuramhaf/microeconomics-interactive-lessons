@@ -167,6 +167,9 @@ let latestState = null;
 
 function renderAll() {
 
+
+  stopGhostAnimation();
+
   qStatusEl.textContent = "";
   
 

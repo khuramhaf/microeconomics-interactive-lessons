@@ -1,9 +1,24 @@
-function animatePriceChange(newPrice, duration) {
+let ghostAnimTimer = null;
 
-    // Stop previous animation
-    g.selectAll(".ghost-dot, .ghost-proj")
+function stopGhostAnimation() {
+
+    // Stop timer
+    if (ghostAnimTimer) {
+        ghostAnimTimer.stop();
+        ghostAnimTimer = null;
+    }
+
+    // Remove ONLY temporary animation elements
+    g.selectAll(".animation-ghost")
         .interrupt()
         .remove();
+}
+
+
+
+function animatePriceChange(newPrice, duration = 800) {
+
+    stopGhostAnimation();
 
     const startPrice = state.P;
     const endPrice = newPrice;
@@ -11,72 +26,79 @@ function animatePriceChange(newPrice, duration) {
     const intercept = state.intercept;
     const slope = state.slope;
 
-    const qFromPrice = p => (p - state.intercept) / state.slope;
+    const qFromPrice = p => (p - intercept) / slope;
 
     const ghostH = g.append("line")
-        .attr("class", "ghost-proj")
+        .attr("class", "ghost-proj animation-ghost")
         .attr("opacity", 0.55);
 
-
     const ghostDot = g.append("circle")
-        .attr("class", "ghost-dot")
+        .attr("class", "ghost-dot animation-ghost")
         .attr("r", 12)
         .attr("opacity", 0.55);
 
-    d3.transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("move", () => {
+    const interpPrice = d3.interpolateNumber(
+        startPrice,
+        endPrice
+    );
 
-            const interpPrice = d3.interpolateNumber(startPrice, endPrice);
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-            return t => {
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                const P = interpPrice(t);
-                const Q = qFromPrice(P);
+        const cycleTime = elapsed % cycleDuration;
 
-                ghostDot
-                    .attr("cx", xScale(Q))
-                    .attr("cy", yScale(P));
+        let t;
 
-                ghostH
-                    .attr("x1", xScale(0))
-                    .attr("y1", yScale(P))
-                    .attr("x2", xScale(Q))
-                    .attr("y2", yScale(P));
+        // -------------------------
+        // MOVE
+        // -------------------------
+        if (cycleTime < duration) {
 
-            };
-        })
-        .on("end", () => {
-            ghostDot
-        .transition()
-        .delay(1000)
-        .remove();
+            t = cycleTime / duration;
 
-    ghostH
-        .transition()
-        .delay(1000)
-        .remove();
-            
-        });
+        }
+
+        // -------------------------
+        // PAUSE AT TARGET
+        // -------------------------
+        else {
+
+            t = 1;
+        }
+
+        const P = interpPrice(t);
+        const Q = qFromPrice(P);
+
+        ghostDot
+            .attr("cx", xScale(Q))
+            .attr("cy", yScale(P));
+
+        ghostH
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(P))
+            .attr("x2", xScale(Q))
+            .attr("y2", yScale(P));
+
+    });
 }
 
 
-function animateIntercept(targetIntercept, duration = 2000) {
 
+function animateIntercept(targetIntercept, duration = 800) {
 
-    g.selectAll(".ghost-layer")
-        .interrupt()
-        .remove();
+    stopGhostAnimation();
 
     const startIntercept = state.intercept;
 
-    const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
+    const moveIntercept =
+        Math.abs(startIntercept - targetIntercept) > 0.001;
 
     if (!moveIntercept) return;
 
     const ghostGroup = g.append("g")
-        .attr("class", "ghost-layer");
+        .attr("class", "ghost-layer animation-ghost");
 
     const ghostCurve = ghostGroup.append("line")
         .attr("class", "demand-line")
@@ -87,63 +109,81 @@ function animateIntercept(targetIntercept, duration = 2000) {
         targetIntercept
     );
 
-    ghostGroup
-        .transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("hint", () => {
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-            return function (t) {
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                const intercept = interceptInterp(t);
+        const cycleTime = elapsed % cycleDuration;
 
-                // Two points on P = intercept + slope * Q
-                const q1 = 0;
-                const p1 = intercept;
+        let t;
 
-                const q2 = 13;      // or your graph's maximum quantity
-                const p2 = intercept + state.slope * q2;
+        // -------------------------
+        // MOVE
+        // -------------------------
+        if (cycleTime < duration) {
 
-                ghostCurve
-                    .attr("x1", xScale(q1))
-                    .attr("y1", yScale(p1))
-                    .attr("x2", xScale(q2))
-                    .attr("y2", yScale(p2));
+            t = cycleTime / duration;
 
-            };
+        }
 
-        })
-        .on("end", () => {
-            ghostGroup
-                .transition()
-                .delay(1000)
-                .remove();
-        });
+        // -------------------------
+        // PAUSE AT TARGET
+        // -------------------------
+        else {
 
+            t = 1;
+        }
+
+        const intercept = interceptInterp(t);
+
+        // Two points on:
+        // P = intercept + slope * Q
+
+        const q1 = 0;
+        const p1 = intercept;
+
+        const q2 = 13;
+        const p2 = intercept + state.slope * q2;
+
+        ghostCurve
+            .attr("x1", xScale(q1))
+            .attr("y1", yScale(p1))
+            .attr("x2", xScale(q2))
+            .attr("y2", yScale(p2));
+
+    });
 }
 
 
+function animatePriceandIntercept(
+    targetPrice,
+    targetIntercept,
+    duration = 800
+) {
 
-function animatePriceandIntercept(targetPrice, targetIntercept, duration = 2000) {
-
-    g.selectAll(".ghost-layer")
-        .interrupt()
-        .remove();
+    stopGhostAnimation();
 
     const startPrice = state.P;
     const startIntercept = state.intercept;
 
-    const movePrice = Math.abs(startPrice - targetPrice) > 0.001;
-    const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
+    const movePrice =
+        Math.abs(startPrice - targetPrice) > 0.001;
+
+    const moveIntercept =
+        Math.abs(startIntercept - targetIntercept) > 0.001;
 
     // Nothing to animate
     if (!movePrice && !moveIntercept) {
         return;
     }
 
-    // ---------- Ghost Elements ----------
+    // --------------------------------
+    // Ghost elements
+    // --------------------------------
+
     const ghostGroup = g.append("g")
-        .attr("class", "ghost-layer");
+        .attr("class", "ghost-layer animation-ghost");
 
     const ghostCurve = ghostGroup.append("line")
         .attr("class", "demand-line")
@@ -162,90 +202,152 @@ function animatePriceandIntercept(targetPrice, targetIntercept, duration = 2000)
         .attr("class", "proj-line")
         .attr("opacity", 0.55);
 
-    const priceInterp = d3.interpolateNumber(startPrice, targetPrice);
-    const interceptInterp = d3.interpolateNumber(startIntercept, targetIntercept);
+    const priceInterp = d3.interpolateNumber(
+        startPrice,
+        targetPrice
+    );
 
-    ghostGroup
-        .transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("hint", () => {
+    const interceptInterp = d3.interpolateNumber(
+        startIntercept,
+        targetIntercept
+    );
 
-            return function(t) {
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-                let P;
-                let intercept;
+    // --------------------------------
+    // Repeat animation
+    // --------------------------------
 
-                if (movePrice && moveIntercept) {
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                    // First move along the curve, then shift the curve
-                    if (t < 0.5) {
+        const cycleTime = elapsed % cycleDuration;
 
-                        const u = t * 2;
+        let t;
 
-                        P = priceInterp(u);
-                        intercept = startIntercept;
+        // -------------------------
+        // MOVE
+        // -------------------------
+        if (cycleTime < duration) {
 
-                    } else {
+            t = cycleTime / duration;
 
-                        const u = (t - 0.5) * 2;
+        }
 
-                        P = targetPrice;
-                        intercept = interceptInterp(u);
+        // -------------------------
+        // PAUSE AT TARGET
+        // -------------------------
+        else {
 
-                    }
+            t = 1;
+        }
 
-                } else if (movePrice) {
+        let P;
+        let intercept;
 
-                    // Only move along the curve
-                    P = priceInterp(t);
-                    intercept = startIntercept;
+        // --------------------------------
+        // BOTH PRICE + INTERCEPT CHANGE
+        // --------------------------------
 
-                } else {
+        if (movePrice && moveIntercept) {
 
-                    // Only shift the curve
-                    P = targetPrice;
-                    intercept = interceptInterp(t);
+            /*
+             * First:
+             * move price along the original curve
+             *
+             * Then:
+             * shift the curve
+             */
 
-                }
+            if (t < 0.5) {
 
-                // Supply equation:
-                // P = intercept + slope * Q
-                const Q = (P - intercept) / state.slope;
+                const u = t * 2;
 
-                const dotX = xScale(Q);
-                const dotY = yScale(P);
+                P = priceInterp(u);
+                intercept = startIntercept;
 
-                // Supply curve
-                ghostCurve
-    .attr("x1", xScale(0))
-    .attr("y1", yScale(intercept))
-    .attr("x2", xScale((P - intercept) / state.slope))
-    .attr("y2", yScale(P));
+            } else {
 
-                ghostDot
-                    .attr("cx", dotX)
-                    .attr("cy", dotY);
+                const u = (t - 0.5) * 2;
 
-                // Horizontal projection
-                ghostX
-                    .attr("x1", dotX)
-                    .attr("y1", dotY)
-                    .attr("x2", xScale(0))
-                    .attr("y2", dotY);
+                P = targetPrice;
+                intercept = interceptInterp(u);
+            }
 
-               
+        }
 
-            };
+        // --------------------------------
+        // ONLY PRICE CHANGES
+        // --------------------------------
 
-        })
-        .on("end", () => {
+        else if (movePrice) {
 
-            ghostGroup
-                .transition()
-                .delay(1000)
-                .remove();
+            P = priceInterp(t);
+            intercept = startIntercept;
 
-        });
+        }
 
+        // --------------------------------
+        // ONLY INTERCEPT CHANGES
+        // --------------------------------
+
+        else {
+
+            P = targetPrice;
+            intercept = interceptInterp(t);
+
+        }
+
+        // --------------------------------
+        // Calculate quantity
+        // --------------------------------
+
+        const Q =
+            (P - intercept) / state.slope;
+
+        const dotX = xScale(Q);
+        const dotY = yScale(P);
+
+        // --------------------------------
+        // Ghost curve
+        // --------------------------------
+
+        ghostCurve
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(intercept))
+            .attr(
+                "x2",
+                xScale((P - intercept) / state.slope)
+            )
+            .attr("y2", yScale(P));
+
+        // --------------------------------
+        // Ghost dot
+        // --------------------------------
+
+        ghostDot
+            .attr("cx", dotX)
+            .attr("cy", dotY);
+
+        // --------------------------------
+        // Horizontal projection
+        // --------------------------------
+
+        ghostX
+            .attr("x1", dotX)
+            .attr("y1", dotY)
+            .attr("x2", xScale(0))
+            .attr("y2", dotY);
+
+        // --------------------------------
+        // Vertical projection
+        // --------------------------------
+
+        ghostY
+            .attr("x1", dotX)
+            .attr("y1", dotY)
+            .attr("x2", dotX)
+            .attr("y2", yScale(0));
+
+    });
 }

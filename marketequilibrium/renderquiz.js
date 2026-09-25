@@ -83,6 +83,8 @@ qCheckBtn.addEventListener("click", () => {
 
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
+
+  stopGhostAnimation();
   if (!quizQuestions || !quizQuestions.length) return;
 
     if (qGraphLockBtn.parentNode === qActionRow) {
@@ -128,6 +130,8 @@ function renderQuiz() {
 
 
 function renderQuizLock() {
+
+  stopGhostAnimation();
 
   qActionRow.appendChild(qGraphLockBtn);
   qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";

@@ -47,10 +47,10 @@ const quizQuestions = [
   {
     "id": 3,
     "title": "Question 3: Find the Quantity",
-    "prompt": "Set Price = $12. What is the quantity demanded?",
+    "prompt": "Set Price = $14. What is the quantity demanded?",
     "options": generateQuantityOptions,
     "correctAnswer": getQuantityString,
-    "validationState": { "price": 12 },
+    "validationState": { "price": 14 },
     "render": renderQuiz,
     "evaluate": evaluateGraphandOptions,
     "startAnimation": () => animatePriceChange(14, 2000)
@@ -415,6 +415,8 @@ qCheckBtn.addEventListener("click", () => {
 
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
+
+  stopGhostAnimation();
   if (!quizQuestions || !quizQuestions.length) return;
 
 
@@ -461,6 +463,8 @@ function renderQuiz() {
 
 
 function renderQuizLock() {
+
+  stopGhostAnimation();
 
   qActionRow.appendChild(qGraphLockBtn);
   qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";

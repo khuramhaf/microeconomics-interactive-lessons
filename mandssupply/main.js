@@ -164,6 +164,8 @@ let rafPending = false;
 let latestState = null;
 
 function renderAll() {
+
+  stopGhostAnimation();
     if (typeof qStatusEl !== "undefined") qStatusEl.textContent = "";
     latestState = { intercept: state.intercept, P: state.P };
     doRender(latestState);

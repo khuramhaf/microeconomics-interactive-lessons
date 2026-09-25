@@ -93,7 +93,7 @@ const quizQuestions = [
     "validationState": { "demandIntercept":18, "supplyIntercept": -2 },
     "render": renderQuiz,
     "evaluate": evaluateDoubleGraphandOptions,
-    "startAnimation": noHint
+    "startAnimation": animateTwoIntercept
   },
 
 
@@ -587,6 +587,8 @@ qCheckBtn.addEventListener("click", () => {
 
 /* ---------- render the current question into the quiz panel ---------- */
 function renderQuiz() {
+
+  stopGhostAnimation();
   if (!quizQuestions || !quizQuestions.length) return;
 
 
@@ -634,6 +636,9 @@ function renderQuiz() {
 
 
 function renderQuizLock() {
+
+
+  stopGhostAnimation();
 
 
    qActionRow.appendChild(qGraphLockBtn); 

@@ -1,9 +1,27 @@
-function animatePriceChange(newPrice, duration) {
 
-    // Stop previous animation
-    g.selectAll(".ghost-dot, .ghost-proj")
-        .interrupt()
+let ghostAnimTimer = null;
+
+function stopGhostAnimation() {
+
+    // Stop the timer
+    if (ghostAnimTimer) {
+        ghostAnimTimer.stop();
+        ghostAnimTimer = null;
+    }
+
+    // Stop any D3 transitions
+    g.selectAll(".ghost-dot, .ghost-proj, .ghost-layer")
+        .interrupt();
+
+    // Remove ghost elements
+    g.selectAll(".ghost-dot, .ghost-proj, .ghost-layer")
         .remove();
+}
+
+function animatePriceChange(newPrice, duration = 800) {
+
+    // Stop previous ghost animation
+    stopGhostAnimation();
 
     const startPrice = state.P;
     const endPrice = newPrice;
@@ -17,70 +35,67 @@ function animatePriceChange(newPrice, duration) {
         .attr("class", "ghost-proj")
         .attr("opacity", 0.55);
 
-
     const ghostDot = g.append("circle")
         .attr("class", "ghost-dot")
         .attr("r", 12)
         .attr("opacity", 0.55);
 
-    d3.transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("move", () => {
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-            const interpPrice = d3.interpolateNumber(startPrice, endPrice);
+    const priceInterp =
+        d3.interpolateNumber(startPrice, endPrice);
 
-            return t => {
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                const P = interpPrice(t);
-                const Q = qFromPrice(P);
+        const cycleTime = elapsed % cycleDuration;
 
-                ghostDot
-                    .attr("cx", xScale(Q))
-                    .attr("cy", yScale(P));
+        let t;
 
-                ghostH
-                    .attr("x1", xScale(0))
-                    .attr("y1", yScale(P))
-                    .attr("x2", xScale(Q))
-                    .attr("y2", yScale(P));
+        if (cycleTime < duration) {
+            t = cycleTime / duration;
+        } else {
+            t = 1;
+        }
 
-            };
-        })
-        .on("end", () => {
-            ghostDot
-        .transition()
-        .delay(1000)
-        .remove();
+        const P = priceInterp(t);
+        const Q = qFromPrice(P);
 
-    ghostH
-        .transition()
-        .delay(1000)
-        .remove();
-            
-        });
+        ghostDot
+            .attr("cx", xScale(Q))
+            .attr("cy", yScale(P));
+
+        ghostH
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(P))
+            .attr("x2", xScale(Q))
+            .attr("y2", yScale(P));
+    });
 }
 
 
+function animatePriceandIntercept(
+    targetPrice,
+    targetIntercept,
+    duration = 800
+) {
 
-function animatePriceandIntercept(targetPrice, targetIntercept, duration = 2000) {
-
-    g.selectAll(".ghost-layer")
-        .interrupt()
-        .remove();
+    // Stop previous ghost animation
+    stopGhostAnimation();
 
     const startPrice = state.P;
     const startIntercept = state.intercept;
 
-    const movePrice = Math.abs(startPrice - targetPrice) > 0.001;
-    const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
+    const movePrice =
+        Math.abs(startPrice - targetPrice) > 0.001;
 
-    // Nothing to animate
+    const moveIntercept =
+        Math.abs(startIntercept - targetIntercept) > 0.001;
+
     if (!movePrice && !moveIntercept) {
         return;
     }
 
-    // ---------- Ghost Elements ----------
     const ghostGroup = g.append("g")
         .attr("class", "ghost-layer");
 
@@ -97,107 +112,96 @@ function animatePriceandIntercept(targetPrice, targetIntercept, duration = 2000)
         .attr("class", "proj-line")
         .attr("opacity", 0.55);
 
-    const priceInterp = d3.interpolateNumber(startPrice, targetPrice);
-    const interceptInterp = d3.interpolateNumber(startIntercept, targetIntercept);
+    const priceInterp =
+        d3.interpolateNumber(startPrice, targetPrice);
 
-    ghostGroup
-        .transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("hint", () => {
+    const interceptInterp =
+        d3.interpolateNumber(startIntercept, targetIntercept);
 
-            return function(t) {
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-                let P;
-                let intercept;
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                if (movePrice && moveIntercept) {
+        const cycleTime = elapsed % cycleDuration;
 
-                    // Both move (50% + 50%)
+        let t;
 
-                    if (t < 0.5) {
+        if (cycleTime < duration) {
+            t = cycleTime / duration;
+        } else {
+            t = 1;
+        }
 
-                        const u = t * 2;
+        let P;
+        let intercept;
 
-                        P = priceInterp(u);
-                        intercept = startIntercept;
+        if (movePrice && moveIntercept) {
 
-                    } else {
+            if (t < 0.5) {
 
-                        const u = (t - 0.5) * 2;
+                const u = t * 2;
 
-                        P = targetPrice;
-                        intercept = interceptInterp(u);
+                P = priceInterp(u);
+                intercept = startIntercept;
 
-                    }
+            } else {
 
-                } else if (movePrice) {
+                const u = (t - 0.5) * 2;
 
-                    // Only price moves
+                P = targetPrice;
+                intercept = interceptInterp(u);
+            }
 
-                    P = priceInterp(t);
-                    intercept = startIntercept;
+        } else if (movePrice) {
 
-                } else {
+            P = priceInterp(t);
+            intercept = startIntercept;
 
-                    // Only intercept moves
+        } else {
 
-                    P = targetPrice;
-                    intercept = interceptInterp(t);
+            P = targetPrice;
+            intercept = interceptInterp(t);
+        }
 
-                }
+        const Q = (intercept - P) / state.slope;
 
-                const Q = (intercept - P) / state.slope;
+        const dotX = xScale(Q);
+        const dotY = yScale(P);
 
-                const dotX = xScale(Q);
-                const dotY = yScale(P);
+        ghostCurve
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(intercept))
+            .attr("x2", xScale(intercept / state.slope))
+            .attr("y2", yScale(0));
 
-                ghostCurve
-                    .attr("x1", xScale(0))
-                    .attr("y1", yScale(intercept))
-                    .attr("x2", xScale(intercept / state.slope))
-                    .attr("y2", yScale(0));
+        ghostDot
+            .attr("cx", dotX)
+            .attr("cy", dotY);
 
-                ghostDot
-                    .attr("cx", dotX)
-                    .attr("cy", dotY);
-
-                ghostX
-                    .attr("x1", dotX)
-                    .attr("y1", dotY)
-                    .attr("x2", xScale(0))
-                    .attr("y2", dotY);
-
-            };
-
-        })
-        .on("end", () => {
-             ghostGroup
-        .transition()
-        .delay(1000)   // Wait 2 seconds
-        .remove();
-        });
-
+        ghostX
+            .attr("x1", dotX)
+            .attr("y1", dotY)
+            .attr("x2", xScale(0))
+            .attr("y2", dotY);
+    });
 }
 
 
+function animateIntercept(targetIntercept, duration = 800) {
 
-function animateIntercept(targetIntercept, duration = 1000) {
-
-    g.selectAll(".ghost-layer")
-        .interrupt()
-        .remove();
+    // Stop previous ghost animation
+    stopGhostAnimation();
 
     const startIntercept = state.intercept;
 
-    const moveIntercept = Math.abs(startIntercept - targetIntercept) > 0.001;
+    const moveIntercept =
+        Math.abs(startIntercept - targetIntercept) > 0.001;
 
-    // Nothing to animate
     if (!moveIntercept) {
         return;
     }
 
-    // ---------- Ghost Elements ----------
     const ghostGroup = g.append("g")
         .attr("class", "ghost-layer");
 
@@ -205,35 +209,35 @@ function animateIntercept(targetIntercept, duration = 1000) {
         .attr("class", "demand-line")
         .attr("opacity", 0.55);
 
-    const interceptInterp = d3.interpolateNumber(
-        startIntercept,
-        targetIntercept
-    );
+    const interceptInterp =
+        d3.interpolateNumber(
+            startIntercept,
+            targetIntercept
+        );
 
-    ghostGroup
-        .transition()
-        .duration(duration)
-        .ease(d3.easeCubicInOut)
-        .tween("hint", () => {
+    const pauseDuration = 2000;
+    const cycleDuration = duration + pauseDuration;
 
-            return function (t) {
+    ghostAnimTimer = d3.timer(elapsed => {
 
-                const intercept = interceptInterp(t);
+        const cycleTime = elapsed % cycleDuration;
 
-                ghostCurve
-                    .attr("x1", xScale(0))
-                    .attr("y1", yScale(intercept))
-                    .attr("x2", xScale(intercept / state.slope))
-                    .attr("y2", yScale(0));
+        let t;
 
-            };
+        if (cycleTime < duration) {
+            t = cycleTime / duration;
+        } else {
+            t = 1;
+        }
 
-        })
-        .on("end", () => {
-            ghostGroup
-                .transition()
-                .delay(1000)
-                .remove();
-        });
+        const intercept = interceptInterp(t);
 
+        ghostCurve
+            .attr("x1", xScale(0))
+            .attr("y1", yScale(intercept))
+            .attr("x2", xScale(intercept / state.slope))
+            .attr("y2", yScale(0));
+    });
 }
+
+

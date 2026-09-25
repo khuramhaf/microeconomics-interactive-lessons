@@ -36,15 +36,37 @@ function stopGhostAnimation() {
 }
 
 // The shared engine. Give it any list of {show, hide, update(t)} objects.
+
+// The shared engine. Give it any list of {show, hide, update(t)} objects.
 function runGhosts(ghosts) {
   stopGhostAnimation();
+
   activeGhosts = ghosts;
   activeGhosts.forEach(ghost => ghost.show());
+
+  const animationDuration = 800;  // milliseconds to reach target
+  const pauseDuration = 2000;     // milliseconds to stay at target
+  const cycleDuration = animationDuration + pauseDuration;
+
   animTimer = d3.timer(elapsed => {
-    const t = (elapsed % 2000) / 2000;
+
+    const cycleTime = elapsed % cycleDuration;
+
+    let t;
+
+    if (cycleTime < animationDuration) {
+      // Movement phase
+      t = cycleTime / animationDuration;
+    } else {
+      // Pause at target
+      t = 1;
+    }
+
     activeGhosts.forEach(ghost => ghost.update(t));
   });
 }
+
+
 
 /* ---------- ghost dot (with price and/or quantity projection lines) ---------- */
 
