@@ -148,6 +148,7 @@ bindStepper(qtyPlus, 1, "qty");
 
 /* ---------- orchestrator ---------- */
 function renderAll() {
+  qStatusEl.textContent = "";
   renderGraph();   // graph.js — draws from current state
   syncInputs();     // below — mirrors state into the DOM controls
   
@@ -233,10 +234,13 @@ function renderDynamicLines() {
 /* ---------- kick things off ---------- */
 calculateEquilibrium();
 initInputListeners();
-renderAll();
+
 const currentQuestion = quizQuestions[qIndex];
 
     // Safely run setState if it exists, passing the question's current price state
     currentQuestion.setState?.(currentQuestion.questionState.demandIntercept);
 
     currentQuestion.render();
+
+
+    renderAll();

@@ -20,8 +20,8 @@
    ========================================================== */
 
 const quizQuestions = [
-  
-  {
+
+   {
     "id": 1,
     "title": "Question 1: Set the Price",
     "prompt": "Move the graph until Price = $8.",
@@ -32,72 +32,60 @@ const quizQuestions = [
   },
    {
     "id": 2,
-    "title": "Question 2: Set the Consumer Surplus",
-    "prompt": "Move the graph until Consumer Surplus = $16.",
-    "validationState": { "consumerSurplus": 16 },
+    "title": "Question 2: Set the Producer Surplus",
+    "prompt": "Move the graph until Deadweight Loss = $32.",
+    "validationState": { "price": 4 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
     "startAnimation": noHint
   },
   {
     "id": 3,
+    "title": "Question 3: Find the Producer Surplus",
+    "prompt": "Set Price = $10. What is the Producer Surplus?",
+    "options": ["$8", "$16", "$25", "$36"],
+    "correctAnswer": "$25",
+    "validationState": { "price": 10 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraphandOptions,
+    "startAnimation": noHint
+  },
+
+
+   {
+    "id": 3,
     "title": "Question 3: Find the Consumer Surplus",
-    "prompt": "Set Price = $14. What is the Consumer Surplus?",
-    "options": ["$8", "$9", "$70", "$56"],
-    "correctAnswer": "$9",
-    "validationState": { "price": 14 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint
-  },
-  {
-    "id": 4,
-    "title": "Question 4: Find the Price",
-    "prompt": "Set Consumer Surplus = $64. What is the Price?",
-    "options": ["$8", "$6", "$4", "$10"],
-    "correctAnswer": "$4",
-    "validationState": { "consumerSurplus": 64 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint
-  },
-
-    {
-    "id": 5,
-    "title": "Question 4: Find the Base",
-    "prompt": "Set Consumer Surplus = $49. What is the Base (Quantity)?",
-    "options": ["3", "9", "4", "7"],
-    "correctAnswer": "7",
-    "validationState": { "consumerSurplus": 49 },
-    "render": renderQuiz,
-    "evaluate": evaluateGraphandOptions,
-    "startAnimation": noHint
-  },
-
-    {
-    "id": 6,
-    "title": "Question 4: Find the Height",
-    "prompt": "Set Price = $12. What is the Height (YIntercept - Price)?",
-    "options": ["3", "8", "4", "7"],
-    "correctAnswer": "8",
-    "validationState": { "price": 12 },
+    "prompt": "Set Price = $6. What is the Consumer Surplus?",
+    "options": ["$8", "$45", "$25", "$36"],
+    "correctAnswer": "$45",
+    "validationState": { "price": 6 },
     "render": renderQuiz,
     "evaluate": evaluateGraphandOptions,
     "startAnimation": noHint
   },
 
 
-  {
+   {
+    "id": 2,
+    "title": "Question 2: Find the Deadweight Loss",
+    "prompt": "Find the price at which deadweight loss is maximum.",
+    "validationState": { "price": 0 },
+    "render": renderQuiz,
+    "evaluate": evaluateGraph,
+    "startAnimation": noHint
+  },
+
+   {
     "id": 7,
     "title": "Question 7: Set the Price",
-    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $12. What happens to Consumer Surplus?",
+    "prompt": "The graph is currently set at Price = $8. Move the graph until Price = $4. What happens to Deadweight Loss?",
     "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It decreases",
+    "correctAnswer": "It increases",
     "questionState": {"price": 8},
-    "validationState": { "price": 12 },
+    "validationState": { "price": 4 },
     "render": renderQuizLock,
     "setState": setState,
-    "lockState": lockStateIncrease,
+    "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
     "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
@@ -107,46 +95,11 @@ const quizQuestions = [
      {
     "id": 8,
     "title": "Question 8: Set the Price",
-    "prompt": "The graph is currently set at Price = $16. Move the graph until Price = $8. What happens to Consumer Surplus?",
+    "prompt": "The graph is currently set at Price = $6. Move the graph until Price = $8. What happens to Producer Surplus?",
     "options": ["It decreases", "It increases", "It remains the same"],
     "correctAnswer": "It increases",
-    "questionState": {"price": 16},
+    "questionState": {"price": 6},
     "validationState": { "price": 8 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateDecrease,
-    "evaluate": evaluateGraphandOptions,
-    "lockUnlockReset": graphStateLockUnlock,
-    "startAnimation": noHint,
-    
-  },
-
-
-     {
-    "id": 9,
-    "title": "Question 9: Set the Consumer Surplus",
-    "prompt": "The graph is currently set at Consumer Surplus = $9. Move the graph until Consumer Surplus = $25. What happens to Price?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It decreases",
-    "questionState": {"price": 14},
-    "validationState": { "price": 10 },
-    "render": renderQuizLock,
-    "setState": setState,
-    "lockState": lockStateDecrease,
-    "evaluate": evaluateGraphandOptions,
-    "lockUnlockReset": graphStateLockUnlock,
-    "startAnimation": noHint,
-    
-  },
-
-     {
-    "id": 10,
-    "title": "Question 10: Set the Consumer Surplus",
-    "prompt": "The graph is currently set at Consumer Surplus = $81. Move the graph until Consumer Surplus = $49. What happens to Price?",
-    "options": ["It decreases", "It increases", "It remains the same"],
-    "correctAnswer": "It increases",
-    "questionState": {"price": 2},
-    "validationState": { "price": 6 },
     "render": renderQuizLock,
     "setState": setState,
     "lockState": lockStateIncrease,
@@ -157,16 +110,55 @@ const quizQuestions = [
   },
 
 
-    {
+     {
+    "id": 9,
+    "title": "Question 9: Set the Producer Surplus",
+    "prompt": "The graph is currently set at Consumer Surplus = $45. Move the graph until Consumer Surplus = $36. What happens to Price?",
+    "options": ["It decreases", "It increases", "It remains the same"],
+    "correctAnswer": "It increases",
+    "questionState": {"price": 6},
+    "validationState": { "price": 12 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "lockState": lockStateIncrease,
+    "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
+    "startAnimation": noHint,
+    
+  },
+
+ {
+  "id": 10,
+  "title": "Question 10: Non-Binding Price Ceiling",
+  "prompt": "The graph is currently at the equilibrium price of $12. Move the price ceiling to $16. What is the effect on the market?",
+  "options": [
+    "Consumer Surplus increases",
+    "Deadweight Loss increases",
+    "No Effect",
+    "Producer Surplus decreases"
+  ],
+  "correctAnswer": "No Effect",
+  "questionState": { "price": 12 },
+  "validationState": { "price": 16 },
+  "render": renderQuizLock,
+  "setState": setState,
+  "lockState": lockStateIncrease,
+  "evaluate": evaluateGraphandOptions,
+  "lockUnlockReset": graphStateLockUnlock,
+  "startAnimation": noHint
+},
+
+
+  {
     "id": 10,
     "type":true,
     "title": "Question 10: Set the Intercept",
-    "prompt": "The graph is currently set at Price = $10. Move the price line in a direction that increases the consumer surplus.",
-    "questionState": {"price": 10},
+    "prompt": "The graph is currently set at Price = $4. Move the price line in a direction that increases the producer surplus.",
+    "questionState": {"price": 4},
     "validationState": { "price": 6 },
     "render": renderQuizLock,
     "setState": setState,
-    "evaluate": function() { evaluateGraphPlain.call(this, '<'); },
+    "evaluate": function() { evaluateGraphPlain.call(this, '>'); },
     "lockUnlockReset": resetGraph,
     "startAnimation": noHint,
     
@@ -177,25 +169,31 @@ const quizQuestions = [
     "id": 10,
     "type":true,
     "title": "Question 10: Set the Intercept",
-    "prompt": "The graph is currently set at Price = $10. Move the price line in a direction that decreases the consumer surplus.",
-    "questionState": {"price": 10},
+    "prompt": "The graph is currently set at Price = $12. Move the price line in a direction that increases deadweight Loss.",
+    "questionState": {"price": 12},
     "validationState": { "price": 6 },
     "render": renderQuizLock,
     "setState": setState,
-    "evaluate": function() { evaluateGraphPlain.call(this, '>'); },
+    "evaluate": function() { evaluateGraphPlain.call(this, '<'); },
     "lockUnlockReset": resetGraph,
     "startAnimation": noHint,
     
   },
   
+  
 ];
+
+//we can ask something like this mid of the demand curve and base is this height is this what is ps or cs
+
+
+
+
+
 
 function setState(newPrice) {
 
-  // Update model state
-  state.P = newPrice;
-  state.Q = qtyFromPrice(newPrice);
-  state.CS = consumerSurplusFromPrice(newPrice);
+  setFromP(newPrice)
+  
 
   renderAll();
 
@@ -304,7 +302,7 @@ const STATE_KEY_MAP = {
   quantity: 'Q',
   totalRevenue: 'R',
   intercept: 'intercept', // Future-proofed mapping
-  consumerSurplus: 'CS'
+  consumerSurplus: 'PS'
 };
 
 
@@ -343,20 +341,6 @@ function evaluateGraph(){
 }
 
 
-function evaluateGraphPlain(operator) {
-  const currentPrice = state.P;
-  const targetPrice = this.questionState.price;
-  
-  const isCorrect = operator === '<' 
-    ? currentPrice < targetPrice 
-    : currentPrice > targetPrice;
-
-  qStatusEl.textContent = isCorrect 
-    ? "Answer is ✓ Correct" 
-    : "Adjust the graph to match the target";
-}
-
-
 function evaluateOptions(chosenAnswer) {
 
  
@@ -369,6 +353,20 @@ function evaluateOptions(chosenAnswer) {
 
     qStatusEl.textContent = "Select the right opiton";
   }
+}
+
+
+function evaluateGraphPlain(operator) {
+  const currentPrice = state.P;
+  const targetPrice = this.questionState.price;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
 }
 
 function evaluateGraphandOptions(chosenAnswer) {

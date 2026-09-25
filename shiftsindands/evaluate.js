@@ -63,6 +63,36 @@ function evaluateGraph(){
 }
 
 
+
+function evaluateGraphPlainSupply(operator) {
+  const currentPrice = state.supplyIntercept;
+  const targetPrice = this.questionState.supplyIntercept;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
+}
+
+
+
+function evaluateGraphPlainDemand(operator) {
+  const currentPrice = state.demandIntercept;
+  const targetPrice = this.questionState.demandIntercept;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
+}
+
+
 function evaluateOptions(chosenAnswer) {
 
  

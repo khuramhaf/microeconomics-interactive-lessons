@@ -17,8 +17,6 @@ qCheckBtn.className = "primary";
 qCheckBtn.textContent = "Check Answer";
 
 
-
-
 var graphStateLock=true;
 
 const qGraphLockBtn = document.createElement("button");
@@ -29,11 +27,22 @@ qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
 
 qGraphLockBtn.addEventListener("click", () => {
 
-  if (typeof window.graphStateLockFun === "function") {
-    window.graphStateLockFun();
+  if (typeof quizQuestions[qIndex].lockUnlockReset === "function") {
+    quizQuestions[qIndex].lockUnlockReset();
   }
+
   graphStateLock = !graphStateLock;
-  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  const currentQuestion = quizQuestions[qIndex];
+
+  if (currentQuestion && currentQuestion.type) {
+    // Mode A: Question has a type -> Always show "Reset Graph"
+    qGraphLockBtn.textContent = "Reset Graph";
+  } else {
+    // Mode B: Standard question -> Toggle between "Unlock Graph" & "Lock Graph"
+    qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  }
+
+
 
   
 });
@@ -64,6 +73,9 @@ qStatusEl.parentNode.insertBefore(qActionRow, qStatusEl.nextSibling);
 qCheckBtn.addEventListener("click", () => {
   const q = quizQuestions[qIndex];
   if (q.evaluate) {
+
+     
+    
     q.evaluate(qCheckBtn.dataset.selectedAnswer); // pass both if evaluate needs them
   }
 });
@@ -73,15 +85,12 @@ qCheckBtn.addEventListener("click", () => {
 function renderQuiz() {
   if (!quizQuestions || !quizQuestions.length) return;
 
-  if (qGraphLockBtn.parentNode === qActionRow) {
+    if (qGraphLockBtn.parentNode === qActionRow) {
     qActionRow.removeChild(qGraphLockBtn);
   }
   
   // Clear any leftover data from the previous question
   qCheckBtn.dataset.selectedAnswer = "none";
-  
-  stopGhostAnimation();
-
   qTextEl.textContent = this.prompt;
   qIndexEl.textContent = `Task ${qIndex + 1} of ${quizQuestions.length}`;
   qPrevBtn.disabled = qIndex === 0;
@@ -94,17 +103,22 @@ function renderQuiz() {
   qStatusEl.textContent = "";
   qStatusEl.className = "quiz-status";
   
-  
+  const options =
+    typeof this.options === "function"
+        ? this.options()
+        : this.options;
 
-  if (this.options) {
-    this.options.forEach(opt => {
+  if (options) {
+    options.forEach(opt => {
       const btn = document.createElement("button");
       btn.className = "opt-btn";
       btn.textContent = opt;
       btn.addEventListener("click", (event) => {
   [...qOptionsEl.children].forEach(b => b.style.backgroundColor = "white");
   btn.style.backgroundColor = "lightgray";
-  qCheckBtn.dataset.selectedAnswer = event.target.textContent; // fix: selectedAnswer, not correctAnswer
+  qCheckBtn.dataset.selectedAnswer = event.target.textContent;// fix: selectedAnswer, not correctAnswer
+
+
 });
       qOptionsEl.appendChild(btn);
     });
@@ -113,20 +127,18 @@ function renderQuiz() {
 
 
 
-
 function renderQuizLock() {
 
   qActionRow.appendChild(qGraphLockBtn);
   qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
-  if (!quizQuestions || !quizQuestions.length) return;
+     if(quizQuestions[qIndex].type){
+ qGraphLockBtn.textContent="Reset Graph"
 
- 
+  }
+  if (!quizQuestions || !quizQuestions.length) return;
   
   // Clear any leftover data from the previous question
   qCheckBtn.dataset.selectedAnswer = "none";
-  
-  stopGhostAnimation();
-
   qTextEl.textContent = this.prompt;
   qIndexEl.textContent = `Task ${qIndex + 1} of ${quizQuestions.length}`;
   qPrevBtn.disabled = qIndex === 0;
@@ -139,21 +151,61 @@ function renderQuizLock() {
   qStatusEl.textContent = "";
   qStatusEl.className = "quiz-status";
   
-  
+  const options =
+    typeof this.options === "function"
+        ? this.options()
+        : this.options;
 
-  if (this.options) {
-    this.options.forEach(opt => {
+  if (options) {
+    options.forEach(opt => {
       const btn = document.createElement("button");
       btn.className = "opt-btn";
       btn.textContent = opt;
       btn.addEventListener("click", (event) => {
   [...qOptionsEl.children].forEach(b => b.style.backgroundColor = "white");
   btn.style.backgroundColor = "lightgray";
-  qCheckBtn.dataset.selectedAnswer = event.target.textContent; // fix: selectedAnswer, not correctAnswer
+  qCheckBtn.dataset.selectedAnswer = event.target.textContent;// fix: selectedAnswer, not correctAnswer
+
+
 });
       qOptionsEl.appendChild(btn);
     });
   }
+}
+
+
+
+function generateQuantityOptions() {
+    const correctQty = Number(getQuantity().toFixed(1));
+    const options = new Set();
+    options.add(correctQty.toFixed(1));
+
+    let attempts = 0;
+    while (options.size < 4 && attempts < 100) {
+        // Generates a random decimal offset between -4.0 and +4.0
+        let offset = (Math.random() * 8) - 4; 
+
+        // Avoid an offset of practically zero to ensure we get a different number
+        if (Math.abs(offset) < 0.1) continue;
+
+        // Add the offset and round it strictly to 1 decimal place
+        const qty = Number((correctQty + offset).toFixed(1));
+
+        if (qty >= 0) {
+            options.add(qty.toFixed(1));
+        }
+        
+        attempts++; 
+    }
+
+    // Fallback: If we still need options, increment by random decimal steps
+    while (options.size < 4) {
+        let fallbackOffset = Math.random() * 5 + 1; // Random step between 1.0 and 6.0
+        options.add(Number((correctQty + fallbackOffset).toFixed(1)));
+    }
+
+    // Shuffle and return
+    return [...options].sort(() => Math.random() - 0.5);
 }
 
 /* ---------- nav buttons ---------- */

@@ -27,11 +27,22 @@ qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
 
 qGraphLockBtn.addEventListener("click", () => {
 
-  if (typeof window.graphStateLockFun === "function") {
-    window.graphStateLockFun();
+  if (typeof quizQuestions[qIndex].lockUnlockReset === "function") {
+    quizQuestions[qIndex].lockUnlockReset();
   }
+
   graphStateLock = !graphStateLock;
-  qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  const currentQuestion = quizQuestions[qIndex];
+
+  if (currentQuestion && currentQuestion.type) {
+    // Mode A: Question has a type -> Always show "Reset Graph"
+    qGraphLockBtn.textContent = "Reset Graph";
+  } else {
+    // Mode B: Standard question -> Toggle between "Unlock Graph" & "Lock Graph"
+    qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+  }
+
+
 
   
 });
@@ -117,8 +128,12 @@ function renderQuiz() {
 
 function renderQuizLock() {
 
-  qActionRow.appendChild(qGraphLockBtn);
+   qActionRow.appendChild(qGraphLockBtn);
   qGraphLockBtn.textContent = graphStateLock ? "Unlock Graph" : "Lock Graph";
+     if(quizQuestions[qIndex].type){
+ qGraphLockBtn.textContent="Reset Graph"
+
+  }
   if (!quizQuestions || !quizQuestions.length) return;
   
   // Clear any leftover data from the previous question

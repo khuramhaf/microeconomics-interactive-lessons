@@ -99,6 +99,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -115,6 +116,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -132,6 +134,7 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateIncrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
     "startAnimation": noHint,
     
   },
@@ -148,6 +151,39 @@ const quizQuestions = [
     "setState": setState,
     "lockState": lockStateDecrease,
     "evaluate": evaluateGraphandOptions,
+    "lockUnlockReset": graphStateLockUnlock,
+    "startAnimation": noHint,
+    
+  },
+
+
+  {
+    "id": 10,
+    "type":true,
+    "title": "Question 10: Set the Intercept",
+    "prompt": "The graph is currently set at Price = $10. Move the price line in a direction that increases the producer surplus.",
+    "questionState": {"price": 10},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '>'); },
+    "lockUnlockReset": resetGraph,
+    "startAnimation": noHint,
+    
+  },
+
+
+   {
+    "id": 10,
+    "type":true,
+    "title": "Question 10: Set the Intercept",
+    "prompt": "The graph is currently set at Price = $10. Move the price line in a direction that decreases the producer surplus.",
+    "questionState": {"price": 10},
+    "validationState": { "price": 6 },
+    "render": renderQuizLock,
+    "setState": setState,
+    "evaluate": function() { evaluateGraphPlain.call(this, '<'); },
+    "lockUnlockReset": resetGraph,
     "startAnimation": noHint,
     
   },
@@ -219,7 +255,7 @@ setState(this.questionState.price)
 }
 
 
-function graphStateLockFun(){
+function graphStateLockUnlock(){
 
   
 
@@ -238,12 +274,21 @@ function graphStateLockFun(){
 }
 
 
+function resetGraph(){
+
+    if(quizQuestions[qIndex].type){
+
+    setState(quizQuestions[qIndex].questionState.price)
+
+  }
+}
+
+
 function noHint()
 {
 
   qStatusEl.textContent = "No Animated Hint is available";
 }
-
 /* ==========================================================
    validation.js
    Pure "is the target met" logic. No DOM references — could be
@@ -318,6 +363,20 @@ function evaluateOptions(chosenAnswer) {
 
     qStatusEl.textContent = "Select the right opiton";
   }
+}
+
+
+function evaluateGraphPlain(operator) {
+  const currentPrice = state.P;
+  const targetPrice = this.questionState.price;
+  
+  const isCorrect = operator === '<' 
+    ? currentPrice < targetPrice 
+    : currentPrice > targetPrice;
+
+  qStatusEl.textContent = isCorrect 
+    ? "Answer is ✓ Correct" 
+    : "Adjust the graph to match the target";
 }
 
 function evaluateGraphandOptions(chosenAnswer) {
