@@ -15,6 +15,9 @@ const pricePlus  = document.getElementById("price-plus");
 const dwlMinus   = document.getElementById("dwl-minus");
 const dwlPlus    = document.getElementById("dwl-plus");
 
+const priceNumberM = document.getElementById("price-number-m");
+const qtyNumberM   = document.getElementById("qty-number-m");
+
 const basedisplay   = document.getElementById("base-display");
 const heightdisplay = document.getElementById("height-display");
 
@@ -31,8 +34,11 @@ function bindStepper(btn, dir, type) {
   let activePointerId = null;
 
   function step() {
-    if (type === "price") setFromP(state.P + dir * P_STEP);
-    else setFromDWL(state.DWL + dir * DWL_STEP);
+    setFromP(state.P + dir * P_STEP);
+    
+
+    
+    
   }
 
   function clearAll() {
@@ -138,6 +144,10 @@ function renderAll() {
   if (priceRange) priceRange.value = pStr;
   if (dwlNumber && document.activeElement !== dwlNumber) dwlNumber.value = dwlStr;
   if (dwlRange) dwlRange.value = dwlStr;
+
+
+   if (document.activeElement !== priceNumberM) priceNumberM.value = pStr;
+  if (document.activeElement !== qtyNumberM) qtyNumberM.value = dwlStr;
 
   const cy = yScale(state.P);
   const cxSupply = xScale(state.Qs);

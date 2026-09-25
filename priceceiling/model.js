@@ -102,6 +102,8 @@ function setFromDWL(rawDWL) {
   const targetQ = Math.max(0, Q_EQ - Math.sqrt(clampedDWL / 2));
   const targetP = supplyP(targetQ);
   setFromP(targetP);
+
+  
 }
 
 // Initial calculation
