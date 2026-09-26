@@ -97,7 +97,7 @@ const quizQuestions = [
   "id": 7,
   "title": "Question 7: Revenue Challenge",
   "prompt": "Can you find a point where Total Revenue = $98?",
-  "validationState": { "totalRevenue": 98 },
+  "validationState": { "price": 14, "quantity": 7 },
    "render": renderQuiz,
     "evaluate": evaluateGraph,
     "startAnimation": animateGhostBoth
