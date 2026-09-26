@@ -117,7 +117,7 @@ const quizQuestions = [
     "id": 10,
     "title": "Question 10: Maximum Revenue",
     "prompt": "Move the graph until Total Revenue is as high as possible.",
-    "validationState": { "totalRevenue": 50 },
+    "validationState": { "price": 10, "quantity": 5 },
     "render": renderQuiz,
     "evaluate": evaluateGraph,
     "startAnimation": animateGhostBoth
