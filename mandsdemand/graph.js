@@ -90,14 +90,30 @@ intercept = roundStep(intercept, 0.2);
    
         state.intercept = intercept
 
+
+        newPrice = Math.max(0, Math.min(state.intercept, state.P));
+
+// Snap to the nearest 0.2
+newPrice = roundStep(newPrice, 0.2);
+
+state.P = newPrice;
+
+
+       
+
        
 
         renderAll();
     })
     .on("end", function () {
-    
 
-    const currentQuestion = quizQuestions[qIndex];
+
+
+         
+
+
+
+const currentQuestion = quizQuestions[qIndex];
 
     // Safely run setState if it exists, passing the question's current price state
     currentQuestion.lockState?.();
