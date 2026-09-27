@@ -47,13 +47,13 @@ const quizQuestions = [
   {
     "id": 3,
     "title": "Question 3: Find the Quantity",
-    "prompt": "Set Price = $14. What is the quantity demanded?",
+    "prompt": "Set Price = $10. What is the quantity demanded?",
     "options": generateQuantityOptions,
     "correctAnswer": getQuantityString,
-    "validationState": { "price": 14 },
+    "validationState": { "price": 10 },
     "render": renderQuiz,
     "evaluate": evaluateGraphandOptions,
-    "startAnimation": () => animatePriceChange(14, 2000)
+    "startAnimation": () => animatePriceChange(10, 2000)
   },
 {
   id: 4,
