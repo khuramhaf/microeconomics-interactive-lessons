@@ -99,11 +99,9 @@ newPrice = roundStep(newPrice, 0.2);
 state.P = newPrice;
 
 
-       
+state.Q = Number(getQuantity().toFixed(1))
 
-       
-
-        renderAll();
+renderAll();
     })
     .on("end", function () {
 
@@ -137,6 +135,7 @@ newPrice = Math.max(0, Math.min(state.intercept, newPrice));
 newPrice = roundStep(newPrice, 0.2);
 
 state.P = newPrice;
+state.Q = Number(getQuantity().toFixed(1))
                 renderAll();
             });
 

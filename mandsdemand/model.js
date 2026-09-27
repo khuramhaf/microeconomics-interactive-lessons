@@ -63,6 +63,7 @@ function setFromP(rawP) {
             if (isNaN(val)) return;
             state.intercept = Number(Math.max(0, Math.min(26, val)).toFixed(1));
             if (state.P > state.intercept) state.P = state.intercept;
+            state.Q = Number(getQuantity().toFixed(1))
             renderAll();
         }
 
@@ -70,6 +71,7 @@ function setFromP(rawP) {
             let val = parseFloat(newValue);
             if (isNaN(val)) return;
             state.P = Number(Math.max(0, Math.min(state.intercept, val)).toFixed(1));
+            state.Q = Number(getQuantity().toFixed(1))
             renderAll();
         }
 

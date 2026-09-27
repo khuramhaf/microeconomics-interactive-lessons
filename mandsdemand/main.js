@@ -237,7 +237,7 @@ function doRender({ intercept, P }) {
                
 
             // 6. Update Dot location attributes
-            const dotX = xScale(currentQ);
+            const dotX = xScale(state.Q);
             const dotY = yScale(Math.min(intercept, P));
 
             dot.attr("cx", dotX).attr("cy", dotY);
