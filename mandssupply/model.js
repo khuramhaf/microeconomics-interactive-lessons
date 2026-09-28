@@ -33,7 +33,7 @@ function handleInterceptChange(newValue) {
   if (isNaN(val)) return;
   
   // Clamp intercept between -6 and 6
-  state.intercept = Number(Math.max(-6, Math.min(6, val)).toFixed(1));
+  state.intercept = Number(Math.max(-10, Math.min(10, val)).toFixed(1));
   
   // For Supply: Price cannot fall below the intercept (if positive) or below 0
   let minPrice = Math.max(0, state.intercept);

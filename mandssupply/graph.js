@@ -66,7 +66,7 @@ const dragLine = d3.drag()
         // Supply shift math: P = 2Q + intercept -> intercept = P - 2Q
         let intercept = P - 2 * Q;
         
-        intercept = clamp(intercept, -6, 6);
+        intercept = clamp(intercept, -10, 10);
         intercept = roundStep(intercept, 0.2);
 
         state.intercept = intercept;
